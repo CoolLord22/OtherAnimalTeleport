@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="OtherAnimalTeleport" default="makejar" basedir=".">
+    <target name="makejar" description="Create a jar for the project">
+	    <property name="src" location="src" />
+    	<property name="package" location="${src}/com/coollord22/otheranimalteleport" />
+	    	
+        <echo message="${ant.project.name}: ${ant.file}" />
+        <echo message="Building ${ant.project.name}" />
+    	
+        <javac debug="true" debuglevel="${debuglevel}" destdir="bin" includeAntRuntime="no">
+            <src path="src" />
+            <classpath refid="classpath" />
+        </javac>
+    	
+    	
+        <jar destfile="${ant.project.name}.jar">
+            <fileset dir="bin"></fileset>
+            <fileset file="${package}/plugin.yml"></fileset>
+            <fileset dir="OtherAnimalTeleport/" />
+        </jar>
+    	
+    </target>
+</project>

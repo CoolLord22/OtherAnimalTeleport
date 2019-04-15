@@ -1,0 +1,13 @@
+name: OtherAnimalTeleport
+main: com.coollord22.otheranimalteleport.OtherAnimalTeleport
+version: 1.2
+author: CoolLord22
+api-version: 1.13
+commands:
+    oat:
+        description: A simple plugin to teleport animals!
+        usage: |
+            §7
+            §aOtherAnimalTeleport §7(allow users to teleport animals!) 
+            §7Version: 1.2
+            §7

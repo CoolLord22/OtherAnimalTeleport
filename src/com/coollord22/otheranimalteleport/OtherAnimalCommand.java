@@ -65,6 +65,7 @@ public class OtherAnimalCommand implements CommandExecutor {
         else
             return "UNKNOWN";
     }
+    
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
     	OATCommand cmd = OATCommand.match(label, args.length >= 1 ? args[0] : "");
@@ -116,4 +117,8 @@ public class OtherAnimalCommand implements CommandExecutor {
 		CommonPlugin.sendMessage(true, sender, "&aOtherAnimalTeleport config reloaded.");
         Log.logInfo("Config reloaded by " + getName(sender) + ".");
     }
+    
+	public OtherAnimalTeleport getOtheranimal() {
+		return otheranimal;
+	}
 }

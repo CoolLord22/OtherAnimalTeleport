@@ -4,8 +4,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import com.coollord22.otheranimalteleport.Verbosity;
-
 public class CommonPlugin {
 	public static String prefix = "&7[&aOtherAnimalTeleport&7] ";
 	

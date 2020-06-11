@@ -12,8 +12,6 @@ import java.util.List;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
-import com.coollord22.otheranimalteleport.Verbosity;
-import com.coollord22.otheranimalteleport.CommonPlugin;
 
 public class OtherAnimalConfig {
 	private final OtherAnimalTeleport parent;
@@ -21,6 +19,7 @@ public class OtherAnimalConfig {
 	protected static Verbosity verbosity = Verbosity.NORMAL;
 	public static boolean gColorLogMessages;
 	public static int radius;
+	public static List<ArrayList<String>> worldGroup = new ArrayList<ArrayList<String>>();
 
 	public OtherAnimalConfig(OtherAnimalTeleport instance) {
 		parent = instance;
@@ -84,7 +83,8 @@ public class OtherAnimalConfig {
         }
     }
     
-    public void loadConfig() throws FileNotFoundException, IOException, InvalidConfigurationException {
+	@SuppressWarnings("unchecked")
+	public void loadConfig() throws FileNotFoundException, IOException, InvalidConfigurationException {
         String filename = "config.yml";
         File global = new File(parent.getDataFolder(), filename);
         YamlConfiguration globalConfig = YamlConfiguration.loadConfiguration(global);
@@ -92,7 +92,7 @@ public class OtherAnimalConfig {
         // did not create successfully or was deleted before reload)
         if (!global.exists()) {
             try {
-                global.createNewFile();
+                global.createNewFile(); 
                 Log.logInfo("Created a config file " + parent.getDataFolder() + "\\" + filename + ", please edit it!");
                 globalConfig.save(global);
             } catch (IOException ex) {
@@ -105,9 +105,14 @@ public class OtherAnimalConfig {
         // Load in the values from the configuration file
         globalConfig.load(global);
 
+        worldGroup.clear();
         verbosity = CommonPlugin.getConfigVerbosity(globalConfig);
         gColorLogMessages = globalConfig.getBoolean("color_log_messages", true);
         radius = globalConfig.getInt("radius", 2);
+        
+        for(Object input : globalConfig.getList("groups")) {
+        	worldGroup.add((ArrayList<String>)input);
+        }
 
         Log.logInfo("Loaded global config (" + global + "), keys found: " + " (verbosity=" + verbosity + ")", Verbosity.HIGHEST);
     }

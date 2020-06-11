@@ -16,3 +16,9 @@ color_log_messages: true
 #######################
 # Radius for the area around the player
 radius: 2
+
+#######################
+# World groups to prevent cross-flow of animals
+groups:
+- [world, world_nether]
+- [world2, world2_nether]

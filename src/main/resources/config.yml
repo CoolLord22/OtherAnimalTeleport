@@ -1,0 +1,24 @@
+#######################
+# Config ##############
+#######################
+# Set this to "low" to reduce number of boot messages or to high, highest, extreme for more debugging info
+verbosity: normal
+
+#######################
+# Should we check for updates? - set this to false if you don't want to be notified of new versions
+# Not supported yet :(
+update_checker: true
+
+#######################
+# Color log messages - disable if they annoy you
+color_log_messages: true
+
+#######################
+# Radius for the area around the player
+radius: 2
+
+#######################
+# World groups to prevent cross-flow of animals
+groups:
+- [world, world_nether]
+- [world2, world2_nether]

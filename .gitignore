@@ -26,3 +26,4 @@ rsrc/plugin.yml
 .externalToolBuilders/New_Builder.launch
 .externalToolBuilders/New_Builder (1).launch
 *.jar
+/target/

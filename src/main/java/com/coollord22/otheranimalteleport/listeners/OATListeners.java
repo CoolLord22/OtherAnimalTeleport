@@ -1,7 +1,7 @@
 package com.coollord22.otheranimalteleport.listeners;
 
 import java.text.DecimalFormat;
-import java.util.List;
+import java.util.Set;
 
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
@@ -42,8 +42,8 @@ public class OATListeners implements Listener {
 		if(fromWorld.equals(toWorld)) {
 			sameGroup = true;
 		} else {
-			for(List<String> worldList : plugin.config.worldGroup) {
-				if(worldList.contains(fromWorld.getName()) && worldList.contains(toWorld.getName())) {
+			for(Set<World> worldList : plugin.config.worldGroup) {
+				if(worldList.contains(fromWorld) && worldList.contains(toWorld)) {
 					sameGroup = true;
 					break;
 				}
@@ -52,9 +52,8 @@ public class OATListeners implements Listener {
 		if(plugin.enabled && !event.isCancelled() && sameGroup) {
 			if(event.getPlayer().hasPermission("otheranimalteleport.player.use")) {
 				int radius = plugin.config.radius;
-
+				boolean toSendError = false;
 				for(Entity ent : event.getFrom().getWorld().getNearbyEntities(event.getFrom(), radius, radius, radius)) {
-
 					if(plugin.config.allowedEnts.contains(ent.getType())) {
 						if(((LivingEntity) ent).isLeashed() && ((LivingEntity) ent).getLeashHolder().equals(event.getPlayer())) {
 							OATMethods.teleportLeashedEnt(ent, event.getFrom(), event.getTo(), event.getPlayer(), plugin);
@@ -63,16 +62,17 @@ public class OATListeners implements Listener {
 							if(((Tameable) ent).isTamed() && ((Tameable) ent).getOwner().equals(event.getPlayer()) && !((Sittable) ent).isSitting()) {
 								OATMethods.teleportEnt(ent, event.getFrom(), event.getTo(), event.getPlayer(), plugin);
 							}
+						} else {
+							toSendError = true;
 						}
-					}
-					else {
-						if(plugin.config.failedTeleportMessage != null) 
-							if(!plugin.config.failedTeleportMessage.isEmpty()) {
-								plugin.common.sendMessage(plugin.config.usePrefix, event.getPlayer(), plugin.config.failedTeleportMessage
-										.replaceAll("%x", df.format(event.getFrom().getBlockX()))
-										.replaceAll("%y", df.format(event.getFrom().getBlockY()))
-										.replaceAll("%z", df.format(event.getFrom().getBlockZ())));
-							}
+					} 
+				}
+				if(plugin.config.failedTeleportMessage != null) {
+					if(!plugin.config.failedTeleportMessage.isEmpty() && toSendError) {
+						plugin.common.sendMessage(plugin.config.usePrefix, event.getPlayer(), plugin.config.failedTeleportMessage
+								.replaceAll("%x", df.format(event.getFrom().getBlockX()))
+								.replaceAll("%y", df.format(event.getFrom().getBlockY()))
+								.replaceAll("%z", df.format(event.getFrom().getBlockZ())));
 					}
 				}
 			}

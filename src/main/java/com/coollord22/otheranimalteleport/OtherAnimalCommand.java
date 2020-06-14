@@ -120,6 +120,7 @@ public class OtherAnimalCommand implements CommandExecutor {
 	private void cmdHelp(CommandSender sender) {
 		List<String> result = new ArrayList<String>();
 		result.add("&b---------========== Help Page ==========---------");
+		result.add(" &a/oat help&7: see this help page");
 		result.add(" &a/oat reload&7: reload config");
 		result.add("");
 		for(String msg : result) {

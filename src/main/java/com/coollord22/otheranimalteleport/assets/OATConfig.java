@@ -7,12 +7,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
+import org.bukkit.Bukkit;
+import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.EntityType;
-
 import com.coollord22.otheranimalteleport.OtherAnimalTeleport;
 
 public class OATConfig {
@@ -25,7 +29,7 @@ public class OATConfig {
 	
 	public int 						radius;
 	
-	public List<ArrayList<String>> 	worldGroup = new ArrayList<ArrayList<String>>();
+	public List<Set<World>> 		worldGroup = new ArrayList<Set<World>>();
 	public List<EntityType> 		allowedEnts = new ArrayList<EntityType>();
 	
 	public String 					prefix;
@@ -129,13 +133,28 @@ public class OATConfig {
 		//messages
 		failedTeleportMessage = globalConfig.getString("fail_teleport", "&7An entity could not be teleported and is located near (&c%x&7, &c%y&7, &c%z&7).");
 
-		for(Object input : globalConfig.getList("groups")) {
-			worldGroup.add((ArrayList<String>)input);
+		for(Object input : globalConfig.getList("world_groups")) {
+			Set<World> worldList = new HashSet<World>();
+			for(String inputWorld : (ArrayList<String>)input) {
+				boolean foundMatch = false;
+				for(World knownWorld : Bukkit.getWorlds()) {
+					if(knownWorld.getName().equalsIgnoreCase(inputWorld)) {
+						foundMatch = true;
+						worldList.add(knownWorld);
+					}
+				}
+				if(!foundMatch) {
+					plugin.log.logWarning("Unrecognized world name specified (" + inputWorld + ")! Skipping...");
+				}
+			}
+			worldGroup.add(worldList);
 		}
+		
 		for(String input : globalConfig.getStringList("allowed_entities")) {
-			if(input.equalsIgnoreCase("ANY") || input.equalsIgnoreCase("ALL")) {
+			if(input.equals("ANY") || input.equals("ALL")) {
 				for(EntityType entType : EntityType.values()) {
-					allowedEnts.add(entType);
+					if(entType.isAlive() && !(entType.equals(EntityType.valueOf("PLAYER"))))
+						allowedEnts.add(entType);
 				}
 			} 
 			else {

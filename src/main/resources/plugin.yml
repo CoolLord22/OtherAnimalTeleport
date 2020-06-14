@@ -11,3 +11,32 @@ commands:
             §aOtherAnimalTeleport §7(allow users to teleport animals!) 
             §7Version: 1.3
             §7
+
+permissions:
+    otheranimalteleport.*:
+        description: Gives access to all permissions
+        children:
+            otheranimalteleport.player.*: true
+            otheranimalteleport.admin.*: true
+    otheranimalteleport.player.*:
+        description: Gives access to all regular player permissions
+        children:
+            otheranimalteleport.player.help: true
+            otheranimalteleport.player.use: true
+    otheranimalteleport.admin.*:
+        description: Gives access to all admin permissions
+        children:
+            otheranimalteleport.admin.updates: true
+            otheranimalteleport.admin.reloadconfig: true
+    otheranimalteleport.player.help:
+        description: Gives access to the help command
+        default: true
+    otheranimalteleport.player.use: 
+        description: Gives access to teleporting animals
+        default: true
+    otheranimalteleport.admin.reloadconfig:
+        description: Gives access to reloading config
+        default: op
+    otheranimalteleport.admin.updates: 
+        description: Gives access to update notifications
+        default: op

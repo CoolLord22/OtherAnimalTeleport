@@ -4,10 +4,16 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 
+import com.coollord22.otheranimalteleport.OtherAnimalTeleport;
+
 public class OATCommon {
-	public static String prefix = "&7[&aOtherAnimalTeleport&7] ";
+	private final OtherAnimalTeleport plugin;
+
+	public OATCommon(OtherAnimalTeleport plugin) {
+		this.plugin = plugin;
+	}
 	
-    static public Verbosity getConfigVerbosity(YamlConfiguration config) {
+    public static Verbosity getConfigVerbosity(YamlConfiguration config) {
         String verb_string = config.getString("verbosity", "normal");
         if (verb_string.equalsIgnoreCase("low"))
             return Verbosity.LOW;
@@ -21,9 +27,9 @@ public class OATCommon {
             return Verbosity.NORMAL;
     }
 	
-    public static void sendMessage(boolean usePrefix, CommandSender s, String msg) {
+    public void sendMessage(boolean usePrefix, CommandSender s, String msg) {
     	if(usePrefix)
-    		s.sendMessage(ChatColor.translateAlternateColorCodes('&', prefix + msg));
+    		s.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.config.prefix + msg));
     	else
     		s.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
     }

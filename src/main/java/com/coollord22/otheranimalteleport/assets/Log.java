@@ -12,15 +12,17 @@ import java.util.logging.Logger;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.plugin.java.JavaPlugin;
+import com.coollord22.otheranimalteleport.OtherAnimalTeleport;
 
 public class Log {
     static ConsoleCommandSender console = null;
     static String pluginName = "";
     static String pluginVersion = "";
     static Logger logger = Logger.getLogger("Minecraft");
+    private final OtherAnimalTeleport plugin;
 
-    public Log(JavaPlugin plugin) {
+    public Log(OtherAnimalTeleport plugin) {
+    	this.plugin = plugin;
         if (plugin != null) {
             pluginName = plugin.getDescription().getName();
             pluginVersion = plugin.getDescription().getVersion();
@@ -32,11 +34,11 @@ public class Log {
     }
 
     // LogInfo & Logwarning - display messages with a standard prefix
-    public static void logWarning(String msg) {
+    public void logWarning(String msg) {
         Log.logger.warning("[" + pluginName + ":" + pluginVersion + "] " + msg);
     }
 
-    public static void logInfo(List<String> msgs) {
+    public void logInfo(List<String> msgs) {
         if (msgs == null || msgs.isEmpty())
             return;
         
@@ -45,12 +47,12 @@ public class Log {
         }
     }
 
-    public static void logInfo(String msg) {
+    public void logInfo(String msg) {
         if (OATConfig.verbosity.exceeds(Verbosity.NORMAL))
             Log.logger.info("[" + pluginName + ":" + pluginVersion + "] " + msg);
     }
 
-    public static void logInfoNoVerbosity(String msg) {
+    public void logInfoNoVerbosity(String msg) {
         Log.logger.info("[" + pluginName + ":" + pluginVersion + "] " + msg);
     }
 
@@ -60,12 +62,12 @@ public class Log {
      * 
      * @param msg
      */
-    public static void dMsg(String msg) {
+    public void dMsg(String msg) {
         // Deliberately doesn't check gColorLogMessage as I want these messages
         // to stand out in case they
         // are left in by accident
         if (OATConfig.verbosity.exceeds(Verbosity.HIGHEST))
-            if (console != null && OATConfig.gColorLogMessages) {
+            if (console != null && plugin.config.gColorLogMessages) {
                 console.sendMessage(ChatColor.RED + "[" + pluginName + ":" + pluginVersion + "] " + ChatColor.RESET + msg);
             } else {
                 Log.logger.info("[" + pluginName + ":" + pluginVersion + "] " + msg);
@@ -74,9 +76,9 @@ public class Log {
 
     // LogInfo & LogWarning - if given a level will report the message
     // only for that level & above
-    public static void logInfo(String msg, Verbosity level) {
+    public void logInfo(String msg, Verbosity level) {
         if (OATConfig.verbosity.exceeds(level)) {
-            if (console != null && OATConfig.gColorLogMessages) {
+            if (console != null && plugin.config.gColorLogMessages) {
                 ChatColor col = ChatColor.GREEN;
                 switch (level) {
                 case EXTREME:
@@ -104,13 +106,13 @@ public class Log {
         }
     }
 
-    public static void logWarning(String msg, Verbosity level) {
+    public void logWarning(String msg, Verbosity level) {
         if (OATConfig.verbosity.exceeds(level))
             logWarning(msg);
     }
 
     // TODO: This is only for temporary debug purposes.
-    public static void stackTrace() {
+    public void stackTrace() {
         if (OATConfig.verbosity.exceeds(Verbosity.EXTREME))
             Thread.dumpStack();
     }

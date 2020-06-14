@@ -11,15 +11,13 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permissible;
 
-import com.coollord22.otheranimalteleport.assets.Log;
-import com.coollord22.otheranimalteleport.assets.OATCommon;
 import com.coollord22.otheranimalteleport.assets.Verbosity;
 
 public class OtherAnimalCommand implements CommandExecutor {
-	private final OtherAnimalTeleport otheranimal;
+	private final OtherAnimalTeleport plugin;
 
 	public OtherAnimalCommand(OtherAnimalTeleport plugin) {
-		otheranimal = plugin;
+		this.plugin = plugin;
 	}
 
 	private enum OATCommand {
@@ -103,18 +101,18 @@ public class OtherAnimalCommand implements CommandExecutor {
 			pass = true;
 
 		if (!pass)
-			OATCommon.sendMessage(true, sender, "You don't have permission for this command.");
+			plugin.common.sendMessage(true, sender, "You don't have permission for this command.");
 		return pass;
 	}
 
-	public static boolean hasPermission(Permissible who, String permission) {
+	public boolean hasPermission(Permissible who, String permission) {
         if (who instanceof ConsoleCommandSender)
             return true;
         boolean perm = who.hasPermission(permission);
         if (!perm) {
-            Log.logInfo("SuperPerms - permission (" + permission + ") denied for " + who.toString(), Verbosity.HIGHEST);
+        	plugin.log.logInfo("SuperPerms - permission (" + permission + ") denied for " + who.toString(), Verbosity.HIGHEST);
         } else {
-            Log.logInfo("SuperPerms - permission (" + permission + ") allowed for " + who.toString(), Verbosity.HIGHEST);
+        	plugin.log.logInfo("SuperPerms - permission (" + permission + ") allowed for " + who.toString(), Verbosity.HIGHEST);
         }
         return perm;
     }
@@ -125,17 +123,13 @@ public class OtherAnimalCommand implements CommandExecutor {
 		result.add(" &a/oat reload&7: reload config");
 		result.add("");
 		for(String msg : result) {
-			OATCommon.sendMessage(false, sender, ChatColor.translateAlternateColorCodes('&', msg));
+			plugin.common.sendMessage(false, sender, ChatColor.translateAlternateColorCodes('&', msg));
 		}
 	}
 
 	private void cmdReload(CommandSender sender) {
-		OtherAnimalTeleport.config.load(sender);
-		OATCommon.sendMessage(true, sender, "&aOtherAnimalTeleport config reloaded.");
-		Log.logInfo("Config reloaded by " + getName(sender) + ".");
-	}
-
-	public OtherAnimalTeleport getOtheranimal() {
-		return otheranimal;
+		plugin.config.load(sender);
+		plugin.common.sendMessage(true, sender, "&aOtherAnimalTeleport config reloaded.");
+		plugin.log.logInfo("Config reloaded by " + getName(sender) + ".");
 	}
 }

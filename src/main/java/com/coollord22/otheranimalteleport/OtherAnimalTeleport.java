@@ -9,7 +9,6 @@ import java.util.Collections;
 import java.util.List;
 
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Animals;
 import org.bukkit.entity.EntityType;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -39,8 +38,8 @@ public class OtherAnimalTeleport extends JavaPlugin {
 	@Override
 	public void onEnable() { 
 		plugin = this;
-		initConfig();
 		initCommon();
+		initConfig();
 		registerCommands();
 		registerListeners();
 		if(plugin.config.globalUpdateChecking) {
@@ -52,17 +51,18 @@ public class OtherAnimalTeleport extends JavaPlugin {
 		plugin.enabled = true;
 	}
 
-	private void initConfig() {
-		getDataFolder().mkdirs();
-		config = new OATConfig(this);
-		config.load(null);
-	}
 
 	private void initCommon() {
 		// Set plugin name & version, this must be at the start of onEnable
 		// Used in log messages throughout
 		this.log = new Log(this);
 		this.common = new OATCommon(this);
+	}
+	
+	private void initConfig() {
+		getDataFolder().mkdirs();
+		config = new OATConfig(this);
+		config.load(null);
 	}
 
 	private void registerListeners() {
@@ -82,8 +82,7 @@ public class OtherAnimalTeleport extends JavaPlugin {
         List<String> list = new ArrayList<String>();
 
         for (Enum<?> stuff : e.getEnumConstants()) {
-            if(stuff instanceof Animals)
-                list.add(stuff.toString());
+        	list.add(stuff.toString());
         }
 
         try {

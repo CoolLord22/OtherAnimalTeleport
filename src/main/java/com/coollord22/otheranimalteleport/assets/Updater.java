@@ -48,12 +48,12 @@ public class Updater {
 			}
 
 			else if(spigotPluginVersion.contains("b")) {
-				if(Integer.parseInt(spigotPluginVersion.substring(spigotPluginVersion.indexOf("b"))) > Integer.parseInt(localPluginVersion.substring(localPluginVersion.indexOf("b")))) {
+				if(Integer.parseInt(spigotPluginVersion.substring(spigotPluginVersion.indexOf("b") + 1)) > Integer.parseInt(localPluginVersion.substring(localPluginVersion.indexOf("b") + 1))) {
 					UPDATE_MSG.add(ChatColor.RED + "Latest Version: " + ChatColor.GREEN + spigotPluginVersion + ChatColor.RED + " Your Version: " + ChatColor.GREEN + localPluginVersion);
 					UPDATE_MSG.add(ChatColor.YELLOW + "Please download latest version from: " + ChatColor.GREEN + "https://www.spigotmc.org/resources/63497/updates");
 				}
 			}
-
+			
 			if(!UPDATE_MSG.isEmpty()) {
 				for(String line : UPDATE_MSG) {
 					if(p == null) 

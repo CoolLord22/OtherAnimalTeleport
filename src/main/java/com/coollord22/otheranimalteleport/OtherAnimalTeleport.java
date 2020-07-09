@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.EntityType;
 import org.bukkit.plugin.PluginManager;
@@ -28,6 +29,7 @@ public class OtherAnimalTeleport extends JavaPlugin {
 	public OATCommon common;
 	public Updater updateChecker;
 	public Log log = null;
+	public int pluginID = 8020;
 
 	public boolean enabled;
 
@@ -47,6 +49,7 @@ public class OtherAnimalTeleport extends JavaPlugin {
 			updateChecker.checkForUpdate(null);
 		}
 		writeNames(EntityType.class);
+		new Metrics(this, pluginID);
 		plugin.log.logInfo(ChatColor.GREEN + "AnimalTeleport has been enabled!", Verbosity.LOW);
 		plugin.enabled = true;
 	}

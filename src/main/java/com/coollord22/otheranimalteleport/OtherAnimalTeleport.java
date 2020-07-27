@@ -74,7 +74,7 @@ public class OtherAnimalTeleport extends JavaPlugin {
 	}
 
 	private void registerCommands() {
-		this.getCommand("oat").setExecutor(new OtherAnimalCommand(this));
+		new OtherAnimalCommand(this);
 	}
 	
     public static void writeNames(Class<? extends Enum<?>> e) {

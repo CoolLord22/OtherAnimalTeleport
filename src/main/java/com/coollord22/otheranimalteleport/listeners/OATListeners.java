@@ -55,16 +55,32 @@ public class OATListeners implements Listener {
 				boolean toSendError = false;
 				for(Entity ent : event.getFrom().getWorld().getNearbyEntities(event.getFrom(), radius, radius, radius)) {
 					if(plugin.config.allowedEnts.contains(ent.getType())) {
-						if(((LivingEntity) ent).isLeashed() && ((LivingEntity) ent).getLeashHolder().equals(event.getPlayer())) {
-							OATMethods.teleportLeashedEnt(ent, event.getFrom(), event.getTo(), event.getPlayer(), plugin);
-						}
-						else if(ent instanceof Sittable) {
-							if(((Tameable) ent).isTamed() && ((Tameable) ent).getOwner().equals(event.getPlayer()) && !((Sittable) ent).isSitting()) {
-								OATMethods.teleportEnt(ent, event.getFrom(), event.getTo(), event.getPlayer(), plugin);
+						if(ent instanceof LivingEntity && event.getPlayer().hasPermission("otheranimalteleport.player.teleportleashed")) {
+							if(((LivingEntity) ent).isLeashed() && ((LivingEntity) ent).getLeashHolder().equals(event.getPlayer())) {
+								try {
+									OATMethods.teleportLeashedEnt(ent, event.getFrom(), event.getTo(), event.getPlayer(), plugin);
+									continue;
+								} catch(Exception e) {
+									toSendError = true;
+									continue;
+								}
 							}
-						} else {
 							toSendError = true;
 						}
+						if(ent instanceof Tameable && event.getPlayer().hasPermission("otheranimalteleport.player.teleportpets")) {
+							if(((Tameable) ent).isTamed() && ((Tameable) ent).getOwner().equals(event.getPlayer())) {
+								if(ent instanceof Sittable && !((Sittable) ent).isSitting()) {
+									try {
+										OATMethods.teleportLeashedEnt(ent, event.getFrom(), event.getTo(), event.getPlayer(), plugin);
+										continue;
+									} catch(Exception e) {
+										toSendError = true;
+										continue;
+									}
+								}
+							}
+							toSendError = true;
+						} 
 					} 
 				}
 				if(plugin.config.failedTeleportMessage != null) {

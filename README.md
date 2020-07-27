@@ -20,7 +20,7 @@ A: Tamed entities cannot be sitting while the player teleports. If the entities 
 ## Q: How do I teleport hostile monsters and villagers? 
 A: The plugin will only teleport entities that can be attached via leads, meaning by default, hostile mobs and non-leadable entities cannot be teleported! However, if you have a plugin that allows these entities to be leashed, the plugin now contains support for teleporting non-animal entities! Check out plugins like [Lasso](https://www.spigotmc.org/resources/lasso.54815/) to allow leading other mobs!
 ## Q: How do I restrict teleportation perks to certain users/ranks? .
-A: The plugin supports permissions, so just give your users/ranks otheranimalteleport.player.use! Note that this permission node is REQUIRED to teleport any entity. To further limit teleportation, the plugin supports
+A: The plugin supports permissions, so just give your users/ranks **otheranimalteleport.player.use**! Note that this permission node is REQUIRED to teleport any entity. To further limit teleportation, the plugin supports
 - **otheranimalteleport.player.teleportpets** (give access to only teleporting nearby pets)
 - **otheranimalteleport.player.teleportleashed** (give access to only teleporting nearby leashed entities)
 ## Q: How do I make it teleport animals within a larger radius? 

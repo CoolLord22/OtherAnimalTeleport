@@ -19,7 +19,6 @@ doc/*
 *.jar
 /target/
 
-pom.xml
 buildNumber.properties
 src/main/resources/plugin.yml
 dependency-reduced-pom.xml

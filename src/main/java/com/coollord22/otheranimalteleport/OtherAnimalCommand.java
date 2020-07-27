@@ -1,23 +1,27 @@
 package com.coollord22.otheranimalteleport;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permissible;
+import org.bukkit.util.StringUtil;
 
 import com.coollord22.otheranimalteleport.assets.Verbosity;
 
-public class OtherAnimalCommand implements CommandExecutor {
+public class OtherAnimalCommand implements TabExecutor {
 	private final OtherAnimalTeleport plugin;
 
 	public OtherAnimalCommand(OtherAnimalTeleport plugin) {
 		this.plugin = plugin;
+		plugin.getCommand("oat").setExecutor(this);
+		plugin.getCommand("oat").setTabCompleter(this);
 	}
 
 	private enum OATCommand {
@@ -132,5 +136,15 @@ public class OtherAnimalCommand implements CommandExecutor {
 		plugin.config.load(sender);
 		plugin.common.sendMessage(true, sender, "&aOtherAnimalTeleport config reloaded.");
 		plugin.log.logInfo("Config reloaded by " + getName(sender) + ".");
+	}
+
+	@Override
+	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+		if(command.getName().equalsIgnoreCase("oat")) {
+			if(args.length == 1) {
+				return StringUtil.copyPartialMatches(args[0], Arrays.asList("reload", "help"), new ArrayList<>());
+			}
+		}
+		return null;
 	}
 }

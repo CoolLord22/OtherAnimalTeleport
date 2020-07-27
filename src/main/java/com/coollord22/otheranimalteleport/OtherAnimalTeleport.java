@@ -41,17 +41,22 @@ public class OtherAnimalTeleport extends JavaPlugin {
 	public void onEnable() { 
 		plugin = this;
 		initCommon();
-		initConfig();
-		registerCommands();
-		registerListeners();
-		if(plugin.config.globalUpdateChecking) {
-			updateChecker = new Updater(this);
-			updateChecker.checkForUpdate(null);
-		}
-		writeNames(EntityType.class);
-		new Metrics(this, pluginID);
-		plugin.log.logInfo(ChatColor.GREEN + "AnimalTeleport has been enabled!", Verbosity.LOW);
-		plugin.enabled = true;
+		Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+			@Override
+			public void run() {
+				initConfig();
+				registerCommands();
+				registerListeners();
+				if(plugin.config.globalUpdateChecking) {
+					updateChecker = new Updater(plugin);
+					updateChecker.checkForUpdate(null);
+				}
+				writeNames(EntityType.class);
+				new Metrics(plugin, pluginID);
+				plugin.log.logInfo(ChatColor.GREEN + "AnimalTeleport has been enabled!", Verbosity.LOW);
+				plugin.enabled = true;
+			}
+		}, 1L);
 	}
 
 

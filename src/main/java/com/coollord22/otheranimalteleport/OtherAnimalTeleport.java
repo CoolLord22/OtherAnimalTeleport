@@ -51,12 +51,12 @@ public class OtherAnimalTeleport extends JavaPlugin {
 					updateChecker = new Updater(plugin);
 					updateChecker.checkForUpdate(null);
 				}
-				writeNames(EntityType.class);
 				new Metrics(plugin, pluginID);
 				plugin.log.logInfo(ChatColor.GREEN + "AnimalTeleport has been enabled!", Verbosity.LOW);
 				plugin.enabled = true;
 			}
 		}, 1L);
+		writeNames(EntityType.class);
 	}
 
 

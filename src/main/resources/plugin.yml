@@ -4,6 +4,7 @@ version: ${project.version}-b${buildNumber}
 author: CoolLord22
 load: POSTWORLD
 api-version: 1.13
+softdepend: [WorldGuard]
 commands:
     oat:
         description: A simple plugin to teleport animals!

@@ -33,6 +33,15 @@ world_groups:
 allowed_entities: [ANY]
 
 #######################
+# List of regions to deny teleporting animals into and out of. Requires world and region name separated by @
+#
+# The format is "worldName@regionName" where worldName is the name of world containing the regionName. Note if a 
+# region cannot be found it will be logged in console so please check that the name and region are written correctly! 
+#
+# Ex. blocked_regions: ["world@region1", "world@region2"]
+blocked_regions: []
+
+#######################
 # Message handling
 #
 # Set any message to "" to disable

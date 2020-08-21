@@ -17,6 +17,8 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 
 import com.coollord22.otheranimalteleport.OATMethods;
 import com.coollord22.otheranimalteleport.OtherAnimalTeleport;
+import com.sk89q.worldedit.math.BlockVector3;
+import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 
 public class OATListeners implements Listener {
 
@@ -39,6 +41,21 @@ public class OATListeners implements Listener {
 		boolean sameGroup = false;
 		World fromWorld = event.getFrom().getWorld();
 		World toWorld = event.getTo().getWorld();
+		if(plugin.config.blockedRegions.containsKey(toWorld)) {
+			for(ProtectedRegion region : plugin.config.blockedRegions.get(toWorld)) {
+				if(region.contains(BlockVector3.at(event.getTo().getX(), event.getTo().getY(), event.getTo().getZ()))) {
+					if(plugin.config.failedTeleportMessage != null) {
+						if(!plugin.config.failedTeleportMessage.isEmpty()) {
+							plugin.common.sendMessage(plugin.config.usePrefix, event.getPlayer(), plugin.config.failedTeleportMessage
+									.replaceAll("%x", df.format(event.getFrom().getBlockX()))
+									.replaceAll("%y", df.format(event.getFrom().getBlockY()))
+									.replaceAll("%z", df.format(event.getFrom().getBlockZ())));
+						}
+					}
+					return;
+				}
+			}
+		}
 		if(fromWorld.equals(toWorld)) {
 			sameGroup = true;
 		} else {

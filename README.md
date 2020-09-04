@@ -1,6 +1,11 @@
 # OtherAnimalTeleport [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0) [![Discord][discordImg]][discordLink]
 Simple plugin to allow users to take any leashed animals in their proximity while teleporting.
 
+### Donation Link
+If you appreciate our plugins and support, consider donating and showin' us some love <3
+
+[![ko-fi](https://www.ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/O4O425D12)
+
 Branch Name | Version | Build Status
 ---|---|---
 Master | 2.0-b26 | [![Build Status](https://travis-ci.org/CoolLord22/OtherAnimalTeleport.svg?branch=master)](https://travis-ci.org/CoolLord22/OtherAnimalTeleport) 

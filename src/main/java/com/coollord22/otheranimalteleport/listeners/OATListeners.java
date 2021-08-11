@@ -17,6 +17,7 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 
 import com.coollord22.otheranimalteleport.OATMethods;
 import com.coollord22.otheranimalteleport.OtherAnimalTeleport;
+import com.coollord22.otheranimalteleport.assets.Verbosity;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 
@@ -66,15 +67,21 @@ public class OATListeners implements Listener {
 				}
 			}
 		}
+			plugin.log.logInfo("From and To worlds were not found in same group, ending checks.", Verbosity.HIGH);
 		if(plugin.enabled && !event.isCancelled() && sameGroup) {
+			plugin.log.logInfo("From and To worlds were in same group, allowing permission check.", Verbosity.HIGHEST);
 			if(event.getPlayer().hasPermission("otheranimalteleport.player.use")) {
+				plugin.log.logInfo("Player permission check passed, gathering nearby entities.", Verbosity.HIGHEST);
 				int radius = plugin.config.radius;
 				boolean toSendError = false;
 				for(Entity ent : event.getFrom().getWorld().getNearbyEntities(event.getFrom(), radius, radius, radius)) {
+					plugin.log.logInfo("Found an entity to teleport: " + ent.getType() + " . Checking if it is allowed.", Verbosity.HIGHEST);
 					if(plugin.config.allowedEnts.contains(ent.getType())) {
+						plugin.log.logInfo("Entity check passed, seeing if player has leashed permissions.", Verbosity.HIGHEST);
 						if(ent instanceof LivingEntity && event.getPlayer().hasPermission("otheranimalteleport.player.teleportleashed")) {
 							if(((LivingEntity) ent).isLeashed() && ((LivingEntity) ent).getLeashHolder().equals(event.getPlayer())) {
 								try {
+									plugin.log.logInfo("Attempting to send leashed entity: " + ent.getType() + ".", Verbosity.HIGHEST);
 									OATMethods.teleportLeashedEnt(ent, event.getFrom(), event.getTo(), event.getPlayer(), plugin);
 									continue;
 								} catch(Exception e) {
@@ -89,6 +96,7 @@ public class OATListeners implements Listener {
 								if(ent instanceof Sittable && !((Sittable) ent).isSitting()) {
 									try {
 										OATMethods.teleportLeashedEnt(ent, event.getFrom(), event.getTo(), event.getPlayer(), plugin);
+										plugin.log.logInfo("Attempting to send pet entity: " + ent.getType() + ".", Verbosity.HIGHEST);
 										continue;
 									} catch(Exception e) {
 										toSendError = true;

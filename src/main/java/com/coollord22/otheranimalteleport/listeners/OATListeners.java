@@ -67,6 +67,7 @@ public class OATListeners implements Listener {
 				}
 			}
 		}
+		if(!sameGroup)
 			plugin.log.logInfo("From and To worlds were not found in same group, ending checks.", Verbosity.HIGH);
 		if(plugin.enabled && !event.isCancelled() && sameGroup) {
 			plugin.log.logInfo("From and To worlds were in same group, allowing permission check.", Verbosity.HIGHEST);
@@ -95,8 +96,8 @@ public class OATListeners implements Listener {
 							if(((Tameable) ent).isTamed() && ((Tameable) ent).getOwner().equals(event.getPlayer())) {
 								if(ent instanceof Sittable && !((Sittable) ent).isSitting()) {
 									try {
-										OATMethods.teleportLeashedEnt(ent, event.getFrom(), event.getTo(), event.getPlayer(), plugin);
 										plugin.log.logInfo("Attempting to send pet entity: " + ent.getType() + ".", Verbosity.HIGHEST);
+										OATMethods.teleportEnt(ent, event.getFrom(), event.getTo(), event.getPlayer(), plugin);
 										continue;
 									} catch(Exception e) {
 										toSendError = true;

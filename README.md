@@ -1,5 +1,11 @@
-# OtherAnimalTeleport [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0) [![Build Status](https://travis-ci.org/CoolLord22/OtherAnimalTeleport.svg?branch=master)](https://travis-ci.org/CoolLord22/OtherAnimalTeleport)
-Simple plugin to allow users to take any leashed animals in their proximity while teleporting. 
+# OtherAnimalTeleport [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0) [![Build Status](https://app.travis-ci.com/CoolLord22/OtherAnimalTeleport.svg?branch=master)](https://app.travis-ci.com/CoolLord22/OtherAnimalTeleport) [![Discord][discordImg]][discordLink]
+Simple plugin to allow users to take any leashed animals in their proximity while teleporting.
+
+## Donation Link
+If you appreciate our plugins and support, consider donating and showin' us some love <3
+
+[![ko-fi](https://www.ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/O4O425D12)
+------
 
 # Features
 - Supports permission checking to only enable 'ranked' users to teleport animals.
@@ -34,3 +40,7 @@ A: For any other questions, please use the Spigot Discussions forum, or check ou
 If you really enjoy this plugin, please drop a review (hopefully 5 stars ;)). If you appreciated my help on a question, also consider rating the plugin! I code for free- I don't ask for money for it, I don't receive donations, and I surely don't get paid to develop. I do it to help others, and when I am recognized for that help, it means everything.
 The reviews section is meant for actual reviews, not to degrade the plugin, make a feature request, or get help. Please don't leave negative reviews on amazing plugins in an attempt to get the authors' attention. Believe me, we DO pay attention to every ticket, issue, discussion comment, etc. Leaving bad reviews to "get our attention" just makes us that much less likely to help you out. If you honestly need help, leave a comment on the Discussions page.
 If you have a feature you want to see in the plugin, leave a comment on the Discussions page and I'll try to respond ASAP.
+
+[discordImg]: https://img.shields.io/discord/418432278113550337.svg?logo=discord&logoWidth=18&colorB=7289DA
+
+[discordLink]: https://discordapp.com/invite/eHBxk5q

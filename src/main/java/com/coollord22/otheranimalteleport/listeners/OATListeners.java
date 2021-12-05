@@ -93,7 +93,7 @@ public class OATListeners implements Listener {
 							toSendError = true;
 						}
 						if(ent instanceof Tameable && event.getPlayer().hasPermission("otheranimalteleport.player.teleportpets")) {
-							if(((Tameable) ent).isTamed() && ((Tameable) ent).getOwner().equals(event.getPlayer())) {
+							if(((Tameable) ent).isTamed() && ((Tameable) ent).getOwner() != null && ((Tameable) ent).getOwner().equals(event.getPlayer())) {
 								if(ent instanceof Sittable && !((Sittable) ent).isSitting()) {
 									try {
 										plugin.log.logInfo("Attempting to send pet entity: " + ent.getType() + ".", Verbosity.HIGHEST);

@@ -20,5 +20,4 @@ doc/*
 /target/
 
 buildNumber.properties
-src/main/resources/plugin.yml
 dependency-reduced-pom.xml

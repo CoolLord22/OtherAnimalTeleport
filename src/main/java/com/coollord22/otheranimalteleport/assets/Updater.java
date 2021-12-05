@@ -10,11 +10,10 @@ import java.util.List;
 import javax.net.ssl.HttpsURLConnection;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import com.coollord22.otheranimalteleport.OtherAnimalTeleport;
-
-import net.md_5.bungee.api.ChatColor;
 
 public class Updater {
 
@@ -48,8 +47,13 @@ public class Updater {
 			}
 
 			else if(spigotPluginVersion.contains("b")) {
-				if(Integer.parseInt(spigotPluginVersion.substring(spigotPluginVersion.indexOf("b") + 1)) > Integer.parseInt(localPluginVersion.substring(localPluginVersion.indexOf("b") + 1))) {
-					UPDATE_MSG.add(ChatColor.RED + "Latest Version: " + ChatColor.GREEN + spigotPluginVersion + ChatColor.RED + " Your Version: " + ChatColor.GREEN + localPluginVersion);
+				Double spigot = Double.parseDouble(spigotPluginVersion.substring(0, spigotPluginVersion.indexOf("-b")));
+				Double local = Double.parseDouble(localPluginVersion.substring(0, localPluginVersion.indexOf("-b")));
+				if(spigot > local) {
+					UPDATE_MSG.add(ChatColor.YELLOW + "A new release is available! " + ChatColor.RED + "Latest Version: " + ChatColor.GREEN + spigotPluginVersion + ChatColor.RED + " Your Version: " + ChatColor.GREEN + localPluginVersion);
+					UPDATE_MSG.add(ChatColor.YELLOW + "Please download latest version from: " + ChatColor.GREEN + "https://www.spigotmc.org/resources/63497/updates");
+				} else if(spigot.equals(local) && Integer.parseInt(spigotPluginVersion.substring(spigotPluginVersion.indexOf("b") + 1)) > Integer.parseInt(localPluginVersion.substring(localPluginVersion.indexOf("b") + 1))) {
+					UPDATE_MSG.add(ChatColor.YELLOW + "A new build is available! " + ChatColor.RED + "Latest Version: " + ChatColor.GREEN + spigotPluginVersion + ChatColor.RED + " Your Version: " + ChatColor.GREEN + localPluginVersion);
 					UPDATE_MSG.add(ChatColor.YELLOW + "Please download latest version from: " + ChatColor.GREEN + "https://www.spigotmc.org/resources/63497/updates");
 				}
 			}

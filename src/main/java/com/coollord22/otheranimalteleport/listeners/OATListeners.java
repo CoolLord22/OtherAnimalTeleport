@@ -17,6 +17,9 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 
 import com.coollord22.otheranimalteleport.OATMethods;
 import com.coollord22.otheranimalteleport.OtherAnimalTeleport;
+import com.coollord22.otheranimalteleport.assets.Verbosity;
+import com.sk89q.worldedit.math.BlockVector3;
+import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 
 public class OATListeners implements Listener {
 
@@ -39,6 +42,21 @@ public class OATListeners implements Listener {
 		boolean sameGroup = false;
 		World fromWorld = event.getFrom().getWorld();
 		World toWorld = event.getTo().getWorld();
+		if(plugin.config.blockedRegions.containsKey(toWorld)) {
+			for(ProtectedRegion region : plugin.config.blockedRegions.get(toWorld)) {
+				if(region.contains(BlockVector3.at(event.getTo().getX(), event.getTo().getY(), event.getTo().getZ()))) {
+					if(plugin.config.failedTeleportMessage != null) {
+						if(!plugin.config.failedTeleportMessage.isEmpty()) {
+							plugin.common.sendMessage(plugin.config.usePrefix, event.getPlayer(), plugin.config.failedTeleportMessage
+									.replaceAll("%x", df.format(event.getFrom().getBlockX()))
+									.replaceAll("%y", df.format(event.getFrom().getBlockY()))
+									.replaceAll("%z", df.format(event.getFrom().getBlockZ())));
+						}
+					}
+					return;
+				}
+			}
+		}
 		if(fromWorld.equals(toWorld)) {
 			sameGroup = true;
 		} else {
@@ -49,15 +67,22 @@ public class OATListeners implements Listener {
 				}
 			}
 		}
+		if(!sameGroup)
+			plugin.log.logInfo("From and To worlds were not found in same group, ending checks.", Verbosity.HIGH);
 		if(plugin.enabled && !event.isCancelled() && sameGroup) {
+			plugin.log.logInfo("From and To worlds were in same group, allowing permission check.", Verbosity.HIGHEST);
 			if(event.getPlayer().hasPermission("otheranimalteleport.player.use")) {
+				plugin.log.logInfo("Player permission check passed, gathering nearby entities.", Verbosity.HIGHEST);
 				int radius = plugin.config.radius;
 				boolean toSendError = false;
 				for(Entity ent : event.getFrom().getWorld().getNearbyEntities(event.getFrom(), radius, radius, radius)) {
+					plugin.log.logInfo("Found an entity to teleport: " + ent.getType() + " . Checking if it is allowed.", Verbosity.HIGHEST);
 					if(plugin.config.allowedEnts.contains(ent.getType())) {
+						plugin.log.logInfo("Entity check passed, seeing if player has leashed permissions.", Verbosity.HIGHEST);
 						if(ent instanceof LivingEntity && event.getPlayer().hasPermission("otheranimalteleport.player.teleportleashed")) {
 							if(((LivingEntity) ent).isLeashed() && ((LivingEntity) ent).getLeashHolder().equals(event.getPlayer())) {
 								try {
+									plugin.log.logInfo("Attempting to send leashed entity: " + ent.getType() + ".", Verbosity.HIGHEST);
 									OATMethods.teleportLeashedEnt(ent, event.getFrom(), event.getTo(), event.getPlayer(), plugin);
 									continue;
 								} catch(Exception e) {
@@ -68,10 +93,11 @@ public class OATListeners implements Listener {
 							toSendError = true;
 						}
 						if(ent instanceof Tameable && event.getPlayer().hasPermission("otheranimalteleport.player.teleportpets")) {
-							if(((Tameable) ent).isTamed() && ((Tameable) ent).getOwner().equals(event.getPlayer())) {
+							if(((Tameable) ent).isTamed() && ((Tameable) ent).getOwner() != null && ((Tameable) ent).getOwner().equals(event.getPlayer())) {
 								if(ent instanceof Sittable && !((Sittable) ent).isSitting()) {
 									try {
-										OATMethods.teleportLeashedEnt(ent, event.getFrom(), event.getTo(), event.getPlayer(), plugin);
+										plugin.log.logInfo("Attempting to send pet entity: " + ent.getType() + ".", Verbosity.HIGHEST);
+										OATMethods.teleportEnt(ent, event.getFrom(), event.getTo(), event.getPlayer(), plugin);
 										continue;
 									} catch(Exception e) {
 										toSendError = true;

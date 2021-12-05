@@ -32,6 +32,7 @@ public class OtherAnimalTeleport extends JavaPlugin {
 	public int pluginID = 8020;
 
 	public boolean enabled;
+	public boolean toUseTickets = false;
 
 	public OtherAnimalTeleport() {
 		plugin = this;
@@ -54,6 +55,13 @@ public class OtherAnimalTeleport extends JavaPlugin {
 				new Metrics(plugin, pluginID);
 				plugin.log.logInfo(ChatColor.GREEN + "AnimalTeleport has been enabled!", Verbosity.LOW);
 				plugin.enabled = true;
+
+				String[] serverVersion = (Bukkit.getBukkitVersion().split("-")[0]).split("\\.");
+				if(Integer.valueOf(serverVersion[0]) >= 1)
+					if(Integer.valueOf(serverVersion[1]) >= 14) {
+						toUseTickets = true;
+						plugin.log.logInfo(ChatColor.RED + "Found server version " + serverVersion[0] + "." + serverVersion[1] + " >= 1.14, using chunk tickets!", Verbosity.HIGH);
+					}
 			}
 		}, 1L);
 		writeNames(EntityType.class);
@@ -66,7 +74,7 @@ public class OtherAnimalTeleport extends JavaPlugin {
 		this.log = new Log(this);
 		this.common = new OATCommon(this);
 	}
-	
+
 	private void initConfig() {
 		getDataFolder().mkdirs();
 		config = new OATConfig(this);
@@ -81,32 +89,32 @@ public class OtherAnimalTeleport extends JavaPlugin {
 	private void registerCommands() {
 		new OtherAnimalCommand(this);
 	}
-	
-    public static void writeNames(Class<? extends Enum<?>> e) {
-        writeNames(e.getSimpleName(), e);
-    }
 
-    public static void writeNames(String filename, Class<? extends Enum<?>> e) {
-        List<String> list = new ArrayList<String>();
+	public static void writeNames(Class<? extends Enum<?>> e) {
+		writeNames(e.getSimpleName(), e);
+	}
 
-        for (Enum<?> stuff : e.getEnumConstants()) {
-        	list.add(stuff.toString());
-        }
+	public static void writeNames(String filename, Class<? extends Enum<?>> e) {
+		List<String> list = new ArrayList<String>();
 
-        try {
-            BufferedWriter out = null;
-            File folder = plugin.getDataFolder();
-            File configFile = new File(folder.getAbsolutePath() + File.separator + "known_" + filename + ".txt");
-            configFile.getParentFile().mkdirs();
-            configFile.createNewFile();
-            out = new BufferedWriter(new FileWriter(configFile));
-            Collections.sort(list);
-            for(String mat : list)
-                out.write(mat + "\n");
-            out.close();
-        } catch (IOException exception) {
-            exception.printStackTrace();
-        }
-    }
+		for (Enum<?> stuff : e.getEnumConstants()) {
+			list.add(stuff.toString());
+		}
+
+		try {
+			BufferedWriter out = null;
+			File folder = plugin.getDataFolder();
+			File configFile = new File(folder.getAbsolutePath() + File.separator + "known_" + filename + ".txt");
+			configFile.getParentFile().mkdirs();
+			configFile.createNewFile();
+			out = new BufferedWriter(new FileWriter(configFile));
+			Collections.sort(list);
+			for(String mat : list)
+				out.write(mat + "\n");
+			out.close();
+		} catch (IOException exception) {
+			exception.printStackTrace();
+		}
+	}
 
 }

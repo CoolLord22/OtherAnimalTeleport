@@ -45,14 +45,7 @@ public class OATListeners implements Listener {
 		if(plugin.config.blockedRegions.containsKey(toWorld)) {
 			for(ProtectedRegion region : plugin.config.blockedRegions.get(toWorld)) {
 				if(region.contains(BlockVector3.at(event.getTo().getX(), event.getTo().getY(), event.getTo().getZ()))) {
-					if(plugin.config.failedTeleportMessage != null) {
-						if(!plugin.config.failedTeleportMessage.isEmpty()) {
-							plugin.common.sendMessage(plugin.config.usePrefix, event.getPlayer(), plugin.config.failedTeleportMessage
-									.replaceAll("%x", df.format(event.getFrom().getBlockX()))
-									.replaceAll("%y", df.format(event.getFrom().getBlockY()))
-									.replaceAll("%z", df.format(event.getFrom().getBlockZ())));
-						}
-					}
+					plugin.log.logInfo("Player teleporting into a blocked region; ignoring entity checks.", Verbosity.HIGHEST);
 					return;
 				}
 			}

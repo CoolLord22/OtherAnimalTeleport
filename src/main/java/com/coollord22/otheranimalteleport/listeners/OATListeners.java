@@ -68,6 +68,7 @@ public class OATListeners implements Listener {
 				plugin.log.logInfo("Player permission check passed, gathering nearby entities.", Verbosity.HIGHEST);
 				int radius = plugin.config.radius;
 				boolean toSendError = false;
+				boolean toSendLeft = false;
 				for(Entity ent : event.getFrom().getWorld().getNearbyEntities(event.getFrom(), radius, radius, radius)) {
 					plugin.log.logInfo("Found an entity to teleport: " + ent.getType() + " . Checking if it is allowed.", Verbosity.HIGHEST);
 					if(plugin.config.allowedEnts.contains(ent.getType())) {
@@ -83,7 +84,7 @@ public class OATListeners implements Listener {
 									continue;
 								}
 							}
-							toSendError = true;
+							toSendLeft  = true;
 						}
 						if(ent instanceof Tameable && event.getPlayer().hasPermission("otheranimalteleport.player.teleportpets")) {
 							if(((Tameable) ent).isTamed() && ((Tameable) ent).getOwner() != null && ((Tameable) ent).getOwner().equals(event.getPlayer())) {
@@ -98,13 +99,22 @@ public class OATListeners implements Listener {
 									}
 								}
 							}
-							toSendError = true;
+							toSendLeft  = true;
 						} 
 					} 
 				}
-				if(plugin.config.failedTeleportMessage != null) {
-					if(!plugin.config.failedTeleportMessage.isEmpty() && toSendError) {
+				if(plugin.config.failedTeleportMessage != null && toSendError) {
+					if(!plugin.config.failedTeleportMessage.isEmpty()) {
 						plugin.common.sendMessage(plugin.config.usePrefix, event.getPlayer(), plugin.config.failedTeleportMessage
+								.replaceAll("%x", df.format(event.getFrom().getBlockX()))
+								.replaceAll("%y", df.format(event.getFrom().getBlockY()))
+								.replaceAll("%z", df.format(event.getFrom().getBlockZ())));
+					}
+				}
+				
+				if(plugin.config.leftEntityMessage != null && toSendLeft) {
+					if(!plugin.config.leftEntityMessage.isEmpty()) {
+						plugin.common.sendMessage(plugin.config.usePrefix, event.getPlayer(), plugin.config.leftEntityMessage
 								.replaceAll("%x", df.format(event.getFrom().getBlockX()))
 								.replaceAll("%y", df.format(event.getFrom().getBlockY()))
 								.replaceAll("%z", df.format(event.getFrom().getBlockZ())));

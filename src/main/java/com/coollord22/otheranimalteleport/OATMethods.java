@@ -19,18 +19,26 @@ public class OATMethods {
 
 		plugin.log.logInfo("Attempting to null the leash holder.", Verbosity.HIGHEST);
 		((LivingEntity) ent).setLeashHolder(null);
+
+		boolean invulnerable = ent.isInvulnerable();
 		
 		new BukkitRunnable() {
 			@Override
 			public void run() {
-				plugin.log.logInfo("Protecting entity with damage resistance.", Verbosity.HIGHEST);
+				plugin.log.logInfo("Protecting entity with invulnerability and resistance.", Verbosity.HIGHEST);
+				ent.setInvulnerable(true);
 				((LivingEntity) ent).addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 40, 5));
+
 				plugin.log.logInfo("Teleporting entity " + ent.getType() + " with ID: " + ent.getEntityId(), Verbosity.HIGH);
 				ent.teleport(to);
+
 				plugin.log.logInfo("Re-attaching leash holder as " + p.getName() + ".", Verbosity.HIGHEST);
 				((LivingEntity) ent).setLeashHolder(p);
+
 				if(plugin.toUseTickets) 
 					fromChunk.removePluginChunkTicket(plugin);
+
+				ent.setInvulnerable(invulnerable);
 			}
 		}.runTaskLater(plugin, 2);
 	}
@@ -40,16 +48,22 @@ public class OATMethods {
 		if(plugin.toUseTickets) 
 			fromChunk.addPluginChunkTicket(plugin);
 
+		boolean invulnerable = ent.isInvulnerable();
+
 		new BukkitRunnable() {
 			@Override
 			public void run() {
-				plugin.log.logInfo("Protecting entity with damage resistance.", Verbosity.HIGHEST);
+				plugin.log.logInfo("Protecting entity with invulnerability and resistance.", Verbosity.HIGHEST);
+				ent.setInvulnerable(true);
 				((LivingEntity) ent).addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 40, 5));
+
 				plugin.log.logInfo("Teleporting entity" + ent.getType() + " with ID: " + ent.getEntityId(), Verbosity.HIGH);
 				ent.teleport(to);
 
 				if(plugin.toUseTickets) 
 					fromChunk.removePluginChunkTicket(plugin);
+
+				ent.setInvulnerable(invulnerable);
 			}
 		}.runTaskLater(plugin, 2);
 	}

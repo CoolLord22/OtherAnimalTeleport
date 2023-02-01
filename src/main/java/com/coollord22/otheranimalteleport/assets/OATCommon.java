@@ -33,11 +33,6 @@ public class OATCommon {
     	else
     		s.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
     }
-    
-    static public <E extends Enum<E>> E enumValue(Class<E> clazz, String name) {
-        try {
-            return Enum.valueOf(clazz, name);
-        } catch (IllegalArgumentException e) {
         }
         return null;
     }

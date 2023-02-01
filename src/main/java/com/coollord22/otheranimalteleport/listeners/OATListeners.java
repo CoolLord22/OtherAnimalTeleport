@@ -100,6 +100,13 @@ public class OATListeners implements Listener {
 								}
 							}
 					}
+
+					if(plugin.config.failedTeleportMessage != null && !plugin.config.failedTeleportMessage.isEmpty() && toSendError) {
+						plugin.common.sendMessage(plugin.config.usePrefix, plugin.config.failedTeleportMessage, event);
+					}
+
+					if(plugin.config.leftEntityMessage != null && !plugin.config.leftEntityMessage.isEmpty() && toSendLeft) {
+						plugin.common.sendMessage(plugin.config.usePrefix, plugin.config.leftEntityMessage, event);
 					}
 				}
 			}

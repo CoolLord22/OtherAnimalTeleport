@@ -5,9 +5,13 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import com.coollord22.otheranimalteleport.OtherAnimalTeleport;
+import org.bukkit.event.player.PlayerTeleportEvent;
+
+import java.text.DecimalFormat;
 
 public class OATCommon {
 	private final OtherAnimalTeleport plugin;
+    private final DecimalFormat df = new DecimalFormat("#.#");
 
 	public OATCommon(OtherAnimalTeleport plugin) {
 		this.plugin = plugin;
@@ -33,6 +37,14 @@ public class OATCommon {
     	else
     		s.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
     }
+
+    public void sendMessage(boolean usePrefix, String msg, PlayerTeleportEvent event) {
+        sendMessage(usePrefix, event.getPlayer(), msg
+                .replaceAll("%x", df.format(event.getFrom().getBlockX()))
+                .replaceAll("%y", df.format(event.getFrom().getBlockY()))
+                .replaceAll("%z", df.format(event.getFrom().getBlockZ())));
+    }
+
         }
         return null;
     }

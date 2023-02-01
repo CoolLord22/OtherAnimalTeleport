@@ -1,6 +1,9 @@
 package com.coollord22.otheranimalteleport.assets;
 
+import com.sk89q.worldedit.math.BlockVector3;
+import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import org.bukkit.ChatColor;
+import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -8,6 +11,7 @@ import com.coollord22.otheranimalteleport.OtherAnimalTeleport;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
 import java.text.DecimalFormat;
+import java.util.Set;
 
 public class OATCommon {
 	private final OtherAnimalTeleport plugin;
@@ -45,7 +49,31 @@ public class OATCommon {
                 .replaceAll("%z", df.format(event.getFrom().getBlockZ())));
     }
 
+    public boolean checkWorldGroup(PlayerTeleportEvent event) {
+        World fromWorld = event.getFrom().getWorld();
+        World toWorld = event.getTo().getWorld();
+
+        // Blocked region check
+        if(plugin.config.blockedRegions.containsKey(toWorld)) {
+            for(ProtectedRegion region : plugin.config.blockedRegions.get(toWorld)) {
+                if(region.contains(BlockVector3.at(event.getTo().getX(), event.getTo().getY(), event.getTo().getZ()))) {
+                    plugin.log.logInfo("Player teleporting into a blocked region; ignoring entity checks.", Verbosity.HIGHEST);
+                    return false;
+                }
+            }
         }
-        return null;
+
+        // World Group checks
+        if(fromWorld.equals(toWorld)) {
+            return true;
+        } else {
+            for(Set<World> worldList : plugin.config.worldGroup) {
+                if(worldList.contains(fromWorld) && worldList.contains(toWorld)) {
+                    return true;
+                }
+            }
+        }
+        plugin.log.logInfo("From and To worlds were not found in same group, ending checks.", Verbosity.HIGH);
+        return false;
     }
 }

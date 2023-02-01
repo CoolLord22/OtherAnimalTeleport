@@ -32,6 +32,7 @@ public class OATConfig {
 	public boolean 					gColorLogMessages;
 	public boolean					globalUpdateChecking;
 	public boolean 					usePrefix = true;
+	public boolean 					ignoreUnknownCauses = false;
 
 	public int 						radius;
 
@@ -136,6 +137,7 @@ public class OATConfig {
 		gColorLogMessages = globalConfig.getBoolean("color_log_messages", true);
 		radius = globalConfig.getInt("radius", 2);
 
+		ignoreUnknownCauses = globalConfig.getBoolean("ignore_unknown_causes", false);
 		usePrefix = globalConfig.getBoolean("use_prefix", true);
 		prefix = globalConfig.getString("prefix", "&7[&aOtherAnimalTeleport&7] ");
 

@@ -17,6 +17,11 @@ color_log_messages: true
 radius: 2
 
 #######################
+# Should we ignore unknown teleport causes? This may help solve vehicle dismount left messages on versions > 1.19.3
+# In version 1.19.3 and above, a dismount event was added to teleport cause, so this can safely be ignored.
+ignore_unknown_causes: false
+
+#######################
 # World groups to prevent cross-flow of entities
 world_groups:
 - [world, world_nether]

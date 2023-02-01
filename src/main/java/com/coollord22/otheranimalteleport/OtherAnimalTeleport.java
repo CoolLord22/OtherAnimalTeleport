@@ -57,8 +57,8 @@ public class OtherAnimalTeleport extends JavaPlugin {
 				plugin.enabled = true;
 
 				String[] serverVersion = (Bukkit.getBukkitVersion().split("-")[0]).split("\\.");
-				if(Integer.valueOf(serverVersion[0]) >= 1)
-					if(Integer.valueOf(serverVersion[1]) >= 14) {
+				if(Integer.parseInt(serverVersion[0]) >= 1)
+					if(Integer.parseInt(serverVersion[1]) >= 14) {
 						toUseTickets = true;
 						plugin.log.logInfo(ChatColor.RED + "Found server version " + serverVersion[0] + "." + serverVersion[1] + " >= 1.14, using chunk tickets!", Verbosity.HIGH);
 					}

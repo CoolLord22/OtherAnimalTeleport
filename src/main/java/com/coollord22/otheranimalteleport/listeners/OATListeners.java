@@ -99,28 +99,9 @@ public class OATListeners implements Listener {
 									}
 								}
 							}
-							toSendLeft  = true;
-						} 
-					} 
-				}
-				if(plugin.config.failedTeleportMessage != null && toSendError) {
-					if(!plugin.config.failedTeleportMessage.isEmpty()) {
-						plugin.common.sendMessage(plugin.config.usePrefix, event.getPlayer(), plugin.config.failedTeleportMessage
-								.replaceAll("%x", df.format(event.getFrom().getBlockX()))
-								.replaceAll("%y", df.format(event.getFrom().getBlockY()))
-								.replaceAll("%z", df.format(event.getFrom().getBlockZ())));
 					}
-				}
-				
-				if(plugin.config.leftEntityMessage != null && toSendLeft) {
-					if(!plugin.config.leftEntityMessage.isEmpty()) {
-						plugin.common.sendMessage(plugin.config.usePrefix, event.getPlayer(), plugin.config.leftEntityMessage
-								.replaceAll("%x", df.format(event.getFrom().getBlockX()))
-								.replaceAll("%y", df.format(event.getFrom().getBlockY()))
-								.replaceAll("%z", df.format(event.getFrom().getBlockZ())));
 					}
 				}
 			}
-		}	
 	}
 }

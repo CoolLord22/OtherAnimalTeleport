@@ -60,11 +60,11 @@ public class Updater {
 			
 			if(!UPDATE_MSG.isEmpty()) {
 				for(String line : UPDATE_MSG) {
-					if(p == null) 
-						if(!line.contains("Hooray")) 
-							plugin.log.logWarning(ChatColor.stripColor(line));
+					if(p == null)
+						plugin.log.logWarning(ChatColor.stripColor(line));
 					if(p != null)
-						plugin.common.sendMessage(plugin.config.usePrefix, p, line);
+						if(!line.contains("Hooray"))
+							plugin.common.sendMessage(plugin.config.usePrefix, p, line);
 				}
 			}
 		});

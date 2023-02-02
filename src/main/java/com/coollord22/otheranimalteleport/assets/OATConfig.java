@@ -32,6 +32,7 @@ public class OATConfig {
 	public boolean 					gColorLogMessages;
 	public boolean					globalUpdateChecking;
 	public boolean 					usePrefix = true;
+	public boolean 					ignoreUnknownCauses = false;
 
 	public int 						radius;
 
@@ -41,6 +42,7 @@ public class OATConfig {
 
 	public String 					prefix;
 	public String 					failedTeleportMessage;
+	public String 					leftEntityMessage;
 
 	public OATConfig(OtherAnimalTeleport plugin) {
 		this.plugin = plugin;
@@ -135,11 +137,13 @@ public class OATConfig {
 		gColorLogMessages = globalConfig.getBoolean("color_log_messages", true);
 		radius = globalConfig.getInt("radius", 2);
 
+		ignoreUnknownCauses = globalConfig.getBoolean("ignore_unknown_causes", false);
 		usePrefix = globalConfig.getBoolean("use_prefix", true);
 		prefix = globalConfig.getString("prefix", "&7[&aOtherAnimalTeleport&7] ");
 
 		//messages
 		failedTeleportMessage = globalConfig.getString("fail_teleport", "&7An entity could not be teleported and is located near (&c%x&7, &c%y&7, &c%z&7).");
+		leftEntityMessage = globalConfig.getString("entity_left", "&7An entity was left behind near (&c%x&7, &c%y&7, &c%z&7).");
 
 		if(globalConfig.contains("blocked_regions")) {
 			for(String input : globalConfig.getStringList("blocked_regions")) {

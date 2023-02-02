@@ -22,7 +22,7 @@ public class Updater {
 	private String spigotPluginVersion;
 
 	private static final int ID = 63497;
-	private static final String ERR_MSG = ChatColor.RED + "Update checking faile!";
+	private static final String ERR_MSG = ChatColor.RED + "Update checking failed!";
 
 	public Updater(OtherAnimalTeleport plugin) {
 		this.plugin = plugin;
@@ -60,11 +60,11 @@ public class Updater {
 			
 			if(!UPDATE_MSG.isEmpty()) {
 				for(String line : UPDATE_MSG) {
-					if(p == null) 
-						if(!line.contains("Hooray")) 
-							plugin.log.logWarning(ChatColor.stripColor(line));
+					if(p == null)
+						plugin.log.logWarning(ChatColor.stripColor(line));
 					if(p != null)
-						plugin.common.sendMessage(plugin.config.usePrefix, p, line);
+						if(!line.contains("Hooray"))
+							plugin.common.sendMessage(plugin.config.usePrefix, p, line);
 				}
 			}
 		});

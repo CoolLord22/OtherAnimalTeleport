@@ -30,7 +30,7 @@ public class OATListeners implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)
-	public void onJoinUpdateChecker(PlayerJoinEvent event) throws InterruptedException {
+	public void onJoinUpdateChecker(PlayerJoinEvent event) {
 		Player p = event.getPlayer();
 		if(p.hasPermission("otheranimalteleport.admin.updates") && plugin.config.globalUpdateChecking)
 			plugin.updateChecker.checkForUpdate(p);

@@ -5,7 +5,7 @@
 
 	<groupId>com.coollord22.otheranimalteleport</groupId>
 	<artifactId>OtherAnimalTeleport</artifactId>
-	<version>2.2</version>
+	<version>2.3</version>
 	<packaging>jar</packaging>
 
 	<properties>

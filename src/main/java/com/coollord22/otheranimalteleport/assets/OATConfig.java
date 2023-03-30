@@ -36,8 +36,10 @@ public class OATConfig {
 
 	public int 						radius;
 
-	public List<Set<World>> 		worldGroup = new ArrayList<Set<World>>();
-	public List<EntityType> 		allowedEnts = new ArrayList<EntityType>();
+	public List<Set<World>> 		worldGroup = new ArrayList<>();
+
+	public HashMap<EntityType, Boolean> entityMap = new HashMap<>();
+
 	public HashMap<World, Set<ProtectedRegion>> blockedRegions = new HashMap<>();
 
 	public String 					prefix;
@@ -127,7 +129,7 @@ public class OATConfig {
 		globalConfig.load(global);
 
 		worldGroup.clear();
-		allowedEnts.clear();
+		entityMap.clear();
 		blockedRegions.clear();
 
 		verbosity = OATCommon.getConfigVerbosity(globalConfig);
@@ -198,15 +200,21 @@ public class OATConfig {
 				if(input.equals("ANY") || input.equals("ALL")) {
 					for(EntityType entType : EntityType.values()) {
 						if(entType.isAlive() && !(entType.equals(EntityType.valueOf("PLAYER"))))
-							allowedEnts.add(entType);
+							entityMap.put(entType, true);
 					}
 				} 
 				else {
 					boolean foundMatch = false;
 					for(EntityType entType : EntityType.values()) {
-						if(input.equalsIgnoreCase(entType.toString())) {
+						if(input.startsWith("-")) {
+							if(input.substring(1).equalsIgnoreCase(entType.toString())) {
+								foundMatch = true;
+								entityMap.put(entType, false);
+							}
+						}
+						else if(input.equalsIgnoreCase(entType.toString())) {
 							foundMatch = true;
-							allowedEnts.add(entType);
+							entityMap.put(entType, true);
 						}
 					}
 					if(!foundMatch) {

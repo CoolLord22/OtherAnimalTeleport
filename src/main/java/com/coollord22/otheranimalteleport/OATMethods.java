@@ -38,7 +38,7 @@ public class OATMethods {
 				if(plugin.toUseTickets) 
 					fromChunk.removePluginChunkTicket(plugin);
 
-				ent.setInvulnerable(invulnerable);
+				undoInvulnerable(ent, invulnerable, plugin);
 			}
 		}.runTaskLater(plugin, 2);
 	}
@@ -60,11 +60,21 @@ public class OATMethods {
 				plugin.log.logInfo("[Ent-" + ent.getEntityId() + "] Teleporting entity" + ent.getType(), Verbosity.HIGH);
 				ent.teleport(to);
 
-				if(plugin.toUseTickets) 
+				if(plugin.toUseTickets)
 					fromChunk.removePluginChunkTicket(plugin);
 
-				ent.setInvulnerable(invulnerable);
+				undoInvulnerable(ent, invulnerable, plugin);
 			}
 		}.runTaskLater(plugin, 2);
+	}
+
+	private static void undoInvulnerable(Entity ent, boolean invulnerable, OtherAnimalTeleport plugin) {
+		new BukkitRunnable() {
+			@Override
+			public void run() {
+				plugin.log.logInfo("[Ent-" + ent.getEntityId() + "] Reverting invulnerability status.", Verbosity.HIGHEST);
+				ent.setInvulnerable(invulnerable);
+			}
+		}.runTaskLater(plugin, 30L);
 	}
 }

@@ -66,7 +66,7 @@ public class OATListeners implements Listener {
 
 					for(Entity ent : event.getFrom().getWorld().getNearbyEntities(event.getFrom(), radius, radius, radius)) {
 						plugin.log.logInfo("[Ent-" + ent.getEntityId() + "] Found a(n) " + ent.getType() + ". Checking if type is allowed.", Verbosity.HIGH);
-						if(plugin.config.allowedEnts.contains(ent.getType())) {
+						if(plugin.config.entityMap.get(ent.getType()) != null && plugin.config.entityMap.get(ent.getType())) {
 							plugin.log.logInfo("[Ent-" + ent.getEntityId() + "] Entity-type check passed, checking player permissions.", Verbosity.HIGHEST);
 							if(ent instanceof LivingEntity && event.getPlayer().hasPermission("otheranimalteleport.player.teleportleashed")) {
 								plugin.log.logInfo("[Ent-" + ent.getEntityId() + "] Player leashed permissions check passed, checking leash owner.", Verbosity.HIGHEST);

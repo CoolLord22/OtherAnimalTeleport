@@ -49,38 +49,38 @@ public class OATConfig {
 	}
 
 	public void load(CommandSender sender) {
-		List<String> result = new ArrayList<String>();
+		List<String> result = new ArrayList<>();
 		try { 
 			firstRun();
 			loadConfig();
 		} catch (FileNotFoundException e) {
 			if (verbosity.exceeds(Verbosity.HIGH)) e.printStackTrace();
 			result.add("Config file not found!");
-			result.add("The error was:\n" + e.toString());
+			result.add("The error was:\n" + e);
 			result.add("You can fix the error and reload with /orr.");
 			sendMessage(sender, result);
 		} catch (IOException e) {
 			if (verbosity.exceeds(Verbosity.HIGH)) e.printStackTrace();
 			result.add("There was an IO error which has forced OtherDrops to abort loading!");
-			result.add("The error was:\n" + e.toString());
+			result.add("The error was:\n" + e);
 			result.add("You can fix the error and reload with /orr.");
 			sendMessage(sender, result);
 		} catch (InvalidConfigurationException e) {
 			if (verbosity.exceeds(Verbosity.HIGH)) e.printStackTrace();
 			result.add("Config is invalid!");
-			result.add("The error was:\n" + e.toString());
+			result.add("The error was:\n" + e);
 			result.add("You can fix the error and reload with /orr.");
 			sendMessage(sender, result);
 		} catch (NullPointerException e) {
 			result.add("Config load failed!");
-			result.add("The error was:\n" + e.toString());
+			result.add("The error was:\n" + e);
 			if (verbosity.exceeds(Verbosity.NORMAL)) e.printStackTrace();
 			result.add("Please try the latest version & report this issue to the developer if the problem remains.");
 			sendMessage(sender, result);
 		} catch (Exception e) {
 			if (verbosity.exceeds(Verbosity.HIGH)) e.printStackTrace();
 			result.add("Config load failed!  Something went wrong.");
-			result.add("The error was:\n" + e.toString());
+			result.add("The error was:\n" + e);
 			result.add("If you can fix the error, reload with /orr.");
 			sendMessage(sender, result);
 		}
@@ -93,8 +93,8 @@ public class OATConfig {
 		plugin.log.logInfo(result);
 	}
 
-	private void firstRun() throws Exception {
-		List<String> files = new ArrayList<String>();
+	private void firstRun() {
+		List<String> files = new ArrayList<>();
 		files.add("config.yml");
 
 		for (String filename : files) {
@@ -107,7 +107,7 @@ public class OATConfig {
 	}
 
 	@SuppressWarnings("unchecked")
-	public void loadConfig() throws FileNotFoundException, IOException, InvalidConfigurationException {
+	public void loadConfig() throws IOException, InvalidConfigurationException {
 		String filename = "config.yml";
 		File global = new File(plugin.getDataFolder(), filename);
 		YamlConfiguration globalConfig = YamlConfiguration.loadConfiguration(global);
@@ -118,9 +118,7 @@ public class OATConfig {
 				global.createNewFile(); 
 				plugin.log.logInfo("Created a config file " + plugin.getDataFolder() + "\\" + filename + ", please edit it!");
 				globalConfig.save(global);
-			} catch (IOException ex) {
-				plugin.log.logWarning(plugin.getDescription().getName() + ": could not generate " + filename + ". Are the file permissions OK?");
-			} catch (Exception e) {
+			} catch (Exception ex) {
 				plugin.log.logWarning(plugin.getDescription().getName() + ": could not generate " + filename + ". Are the file permissions OK?");
 			}
 		}
@@ -178,7 +176,7 @@ public class OATConfig {
 
 		if(globalConfig.contains("world_groups")) {
 			for(Object input : globalConfig.getList("world_groups")) {
-				Set<World> worldList = new HashSet<World>();
+				Set<World> worldList = new HashSet<>();
 				for(String inputWorld : (ArrayList<String>)input) {
 					boolean foundMatch = false;
 					for(World knownWorld : Bukkit.getWorlds()) {

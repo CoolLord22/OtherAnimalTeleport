@@ -17,7 +17,7 @@ public class OATMethods {
 		if(plugin.toUseTickets) 
 			fromChunk.addPluginChunkTicket(plugin);
 
-		plugin.log.logInfo("Attempting to null the leash holder.", Verbosity.HIGHEST);
+		plugin.log.logInfo("[Ent-" + ent.getEntityId() + "] Attempting to null the leash holder.", Verbosity.HIGHEST);
 		((LivingEntity) ent).setLeashHolder(null);
 
 		boolean invulnerable = ent.isInvulnerable();
@@ -25,14 +25,14 @@ public class OATMethods {
 		new BukkitRunnable() {
 			@Override
 			public void run() {
-				plugin.log.logInfo("Protecting entity with invulnerability and resistance.", Verbosity.HIGHEST);
+				plugin.log.logInfo("[Ent-" + ent.getEntityId() + "] Protecting entity with invulnerability and resistance.", Verbosity.HIGHEST);
 				ent.setInvulnerable(true);
 				((LivingEntity) ent).addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 40, 5));
 
-				plugin.log.logInfo("Teleporting entity " + ent.getType() + " with ID: " + ent.getEntityId(), Verbosity.HIGH);
+				plugin.log.logInfo("[Ent-" + ent.getEntityId() + "] Teleporting entity " + ent.getType(), Verbosity.HIGH);
 				ent.teleport(to);
 
-				plugin.log.logInfo("Re-attaching leash holder as " + p.getName() + ".", Verbosity.HIGHEST);
+				plugin.log.logInfo("[Ent-" + ent.getEntityId() + "] Re-attaching leash holder as " + p.getName() + ".", Verbosity.HIGHEST);
 				((LivingEntity) ent).setLeashHolder(p);
 
 				if(plugin.toUseTickets) 
@@ -53,11 +53,11 @@ public class OATMethods {
 		new BukkitRunnable() {
 			@Override
 			public void run() {
-				plugin.log.logInfo("Protecting entity with invulnerability and resistance.", Verbosity.HIGHEST);
+				plugin.log.logInfo("[Ent-" + ent.getEntityId() + "] Protecting entity with invulnerability and resistance.", Verbosity.HIGHEST);
 				ent.setInvulnerable(true);
 				((LivingEntity) ent).addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 40, 5));
 
-				plugin.log.logInfo("Teleporting entity" + ent.getType() + " with ID: " + ent.getEntityId(), Verbosity.HIGH);
+				plugin.log.logInfo("[Ent-" + ent.getEntityId() + "] Teleporting entity" + ent.getType(), Verbosity.HIGH);
 				ent.teleport(to);
 
 				if(plugin.toUseTickets) 

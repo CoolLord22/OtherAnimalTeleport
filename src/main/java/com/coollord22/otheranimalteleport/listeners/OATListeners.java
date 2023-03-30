@@ -65,13 +65,14 @@ public class OATListeners implements Listener {
 					boolean toSendLeft = false;
 
 					for(Entity ent : event.getFrom().getWorld().getNearbyEntities(event.getFrom(), radius, radius, radius)) {
-						plugin.log.logInfo("Found an entity to teleport: " + ent.getType() + " . Checking if it is allowed.", Verbosity.HIGHEST);
+						plugin.log.logInfo("[Ent-" + ent.getEntityId() + "] Found a(n) " + ent.getType() + ". Checking if type is allowed.", Verbosity.HIGHEST);
 						if(plugin.config.allowedEnts.contains(ent.getType())) {
-							plugin.log.logInfo("Entity check passed, seeing if player has leashed permissions.", Verbosity.HIGHEST);
+							plugin.log.logInfo("[Ent-" + ent.getEntityId() + "] Entity-type check passed, checking player permissions.", Verbosity.HIGHEST);
 							if(ent instanceof LivingEntity && event.getPlayer().hasPermission("otheranimalteleport.player.teleportleashed")) {
+								plugin.log.logInfo("[Ent-" + ent.getEntityId() + "] Player leashed permissions check passed, checking leash owner.", Verbosity.HIGHEST);
 								if(((LivingEntity) ent).isLeashed() && ((LivingEntity) ent).getLeashHolder().equals(event.getPlayer())) {
 									try {
-										plugin.log.logInfo("Attempting to send leashed entity: " + ent.getType() + ".", Verbosity.HIGHEST);
+										plugin.log.logInfo("[Ent-" + ent.getEntityId() + "] Leash owner passed. Attempting to teleport entity.", Verbosity.HIGHEST);
 										OATMethods.teleportLeashedEnt(ent, event.getFrom(), event.getTo(), event.getPlayer(), plugin);
 										continue;
 									} catch(Exception e) {
@@ -82,10 +83,11 @@ public class OATListeners implements Listener {
 								toSendLeft  = true;
 							}
 							if(ent instanceof Tameable && event.getPlayer().hasPermission("otheranimalteleport.player.teleportpets")) {
+								plugin.log.logInfo("[Ent-" + ent.getEntityId() + "] Player pet permissions check passed, checking pet owner.", Verbosity.HIGHEST);
 								if(((Tameable) ent).isTamed() && ((Tameable) ent).getOwner() != null && ((Tameable) ent).getOwner().equals(event.getPlayer())) {
 									if(ent instanceof Sittable && !((Sittable) ent).isSitting()) {
 										try {
-											plugin.log.logInfo("Attempting to send pet entity: " + ent.getType() + ".", Verbosity.HIGHEST);
+											plugin.log.logInfo("[Ent-" + ent.getEntityId() + "] Pet checks passed. Attempting to teleport entity.", Verbosity.HIGHEST);
 											OATMethods.teleportEnt(ent, event.getFrom(), event.getTo(), event.getPlayer(), plugin);
 											continue;
 										} catch(Exception e) {

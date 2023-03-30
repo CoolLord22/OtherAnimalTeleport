@@ -110,6 +110,7 @@ public class OATListeners implements Listener {
 					}
 				}
 			}
+			return; // Because we ran through the code, no need to send cancelled message
 		}
 		plugin.log.logInfo("Event was cancelled/plugin was disabled, ignoring teleport.", Verbosity.HIGHEST);
 	}

@@ -1,25 +1,14 @@
 package com.coollord22.otheranimalteleport.listeners;
 
-import java.text.DecimalFormat;
-import java.util.Set;
-
-import org.bukkit.World;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Sittable;
-import org.bukkit.entity.Tameable;
+import com.coollord22.otheranimalteleport.OATMethods;
+import com.coollord22.otheranimalteleport.OtherAnimalTeleport;
+import com.coollord22.otheranimalteleport.assets.Verbosity;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
-
-import com.coollord22.otheranimalteleport.OATMethods;
-import com.coollord22.otheranimalteleport.OtherAnimalTeleport;
-import com.coollord22.otheranimalteleport.assets.Verbosity;
-import com.sk89q.worldedit.math.BlockVector3;
-import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 
 public class OATListeners implements Listener {
 

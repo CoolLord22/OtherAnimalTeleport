@@ -54,41 +54,42 @@ public class OATListeners implements Listener {
 					boolean toSendLeft = false;
 
 					for(Entity ent : event.getFrom().getWorld().getNearbyEntities(event.getFrom(), radius, radius, radius)) {
-						plugin.log.logInfo("[Ent-" + ent.getEntityId() + "] Found a(n) " + ent.getType() + ". Checking if type is allowed.", Verbosity.HIGH);
+						String entID = "[Ent-" + ent.getEntityId() + "] ";
+						plugin.log.logInfo(entID + "Found a(n) " + ent.getType() + ". Checking if type is allowed.", Verbosity.HIGH);
 						if(plugin.config.entityMap.get(ent.getType()) != null && plugin.config.entityMap.get(ent.getType())) {
-							plugin.log.logInfo("[Ent-" + ent.getEntityId() + "] Entity-type check passed, checking player permissions.", Verbosity.HIGHEST);
+							plugin.log.logInfo(entID + "Entity-type check passed, checking player permissions.", Verbosity.HIGHEST);
 							if(ent instanceof LivingEntity && event.getPlayer().hasPermission("otheranimalteleport.player.teleportleashed")) {
-								plugin.log.logInfo("[Ent-" + ent.getEntityId() + "] Player leashed permissions check passed, checking leash owner.", Verbosity.HIGHEST);
+								plugin.log.logInfo(entID + "Player leashed permissions check passed, checking leash owner.", Verbosity.HIGHEST);
 								if(((LivingEntity) ent).isLeashed() && ((LivingEntity) ent).getLeashHolder().equals(event.getPlayer())) {
 									try {
-										plugin.log.logInfo("[Ent-" + ent.getEntityId() + "] Leash owner passed. Attempting to teleport entity.", Verbosity.HIGH);
+										plugin.log.logInfo(entID + "Leash owner passed. Attempting to teleport entity.", Verbosity.HIGH);
 										OATMethods.teleportLeashedEnt(ent, event.getFrom(), event.getTo(), event.getPlayer(), plugin);
 										continue;
 									} catch(Exception e) {
-										plugin.log.logInfo("[Ent-" + ent.getEntityId() + "] Teleport reached exception. Sending player error.", Verbosity.HIGHEST);
+										plugin.log.logInfo(entID + "Teleport reached exception. Sending player error.", Verbosity.HIGHEST);
 										toSendError = true;
 										continue;
 									}
 								}
-								plugin.log.logInfo("[Ent-" + ent.getEntityId() + "] Left behind. Sending player notification.", Verbosity.HIGHEST);
+								plugin.log.logInfo(entID + "Left behind. Sending player notification.", Verbosity.HIGHEST);
 								toSendLeft  = true;
 							}
 							if(ent instanceof Tameable && event.getPlayer().hasPermission("otheranimalteleport.player.teleportpets")) {
-								plugin.log.logInfo("[Ent-" + ent.getEntityId() + "] Player pet permissions check passed, checking pet owner.", Verbosity.HIGHEST);
+								plugin.log.logInfo(entID + "Player pet permissions check passed, checking pet owner.", Verbosity.HIGHEST);
 								if(((Tameable) ent).isTamed() && ((Tameable) ent).getOwner() != null && ((Tameable) ent).getOwner().equals(event.getPlayer())) {
 									if(ent instanceof Sittable && !((Sittable) ent).isSitting()) {
 										try {
-											plugin.log.logInfo("[Ent-" + ent.getEntityId() + "] Pet checks passed. Attempting to teleport entity.", Verbosity.HIGH);
+											plugin.log.logInfo(entID + "Pet checks passed. Attempting to teleport entity.", Verbosity.HIGH);
 											OATMethods.teleportEnt(ent, event.getFrom(), event.getTo(), event.getPlayer(), plugin);
 											continue;
 										} catch(Exception e) {
-											plugin.log.logInfo("[Ent-" + ent.getEntityId() + "] Teleport reached exception. Sending player error.", Verbosity.HIGHEST);
+											plugin.log.logInfo(entID + "Teleport reached exception. Sending player error.", Verbosity.HIGHEST);
 											toSendError = true;
 											continue;
 										}
 									}
 								}
-								plugin.log.logInfo("[Ent-" + ent.getEntityId() + "] Left behind. Sending player notification.", Verbosity.HIGHEST);
+								plugin.log.logInfo(entID + "Left behind. Sending player notification.", Verbosity.HIGHEST);
 								toSendLeft  = true;
 							}
 						}

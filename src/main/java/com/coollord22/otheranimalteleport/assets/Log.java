@@ -18,7 +18,7 @@ public class Log {
     static ConsoleCommandSender console = null;
     static String pluginName = "";
     static String pluginVersion = "";
-    static Logger logger = Logger.getLogger("Minecraft");
+    static final Logger logger = Logger.getLogger("Minecraft");
     private final OtherAnimalTeleport plugin;
 
     public Log(OtherAnimalTeleport plugin) {
@@ -27,10 +27,7 @@ public class Log {
             pluginName = plugin.getDescription().getName();
             pluginVersion = plugin.getDescription().getVersion();
         }
-        if (Bukkit.getServer() == null)
-            console = null;
-        else
-            console = Bukkit.getServer().getConsoleSender();
+        console = Bukkit.getServer().getConsoleSender();
     }
 
     // LogInfo & Logwarning - display messages with a standard prefix
@@ -59,8 +56,8 @@ public class Log {
     /**
      * dMsg - used for debug messages that are expected to be removed before
      * distribution
-     * 
-     * @param msg
+     *
+     * @param msg - msg to log
      */
     public void dMsg(String msg) {
         // Deliberately doesn't check gColorLogMessage as I want these messages
@@ -91,12 +88,10 @@ public class Log {
                     col = ChatColor.AQUA;
                     break;
                 case NORMAL:
-                    col = ChatColor.RESET;
+                    case LOW:
+                        col = ChatColor.RESET;
                     break;
-                case LOW:
-                    col = ChatColor.RESET;
-                    break;
-                default:
+                    default:
                     break;
                 }
                 console.sendMessage(col + "[" + pluginName + ":" + pluginVersion + "] " + ChatColor.RESET + msg);

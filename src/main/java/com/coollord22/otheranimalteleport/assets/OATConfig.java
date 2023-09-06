@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -237,7 +238,7 @@ public class OATConfig {
 
 	private void copy(InputStream in, File file) {
 		try {
-			OutputStream out = new FileOutputStream(file);
+			OutputStream out = Files.newOutputStream(file.toPath());
 			byte[] buf = new byte[1024];
 			int len;
 			while ((len = in.read(buf)) > 0) {

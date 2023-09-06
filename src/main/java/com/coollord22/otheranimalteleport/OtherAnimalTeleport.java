@@ -29,7 +29,7 @@ public class OtherAnimalTeleport extends JavaPlugin {
 	public OATCommon common;
 	public Updater updateChecker;
 	public Log log = null;
-	public int pluginID = 8020;
+	public final int pluginID = 8020;
 
 	public boolean enabled;
 	public boolean toUseTickets = false;
@@ -95,14 +95,14 @@ public class OtherAnimalTeleport extends JavaPlugin {
 	}
 
 	public static void writeNames(String filename, Class<? extends Enum<?>> e) {
-		List<String> list = new ArrayList<String>();
+		List<String> list = new ArrayList<>();
 
 		for (Enum<?> stuff : e.getEnumConstants()) {
 			list.add(stuff.toString());
 		}
 
 		try {
-			BufferedWriter out = null;
+			BufferedWriter out;
 			File folder = plugin.getDataFolder();
 			File configFile = new File(folder.getAbsolutePath() + File.separator + "known_" + filename + ".txt");
 			configFile.getParentFile().mkdirs();

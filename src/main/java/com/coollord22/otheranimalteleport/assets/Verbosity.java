@@ -18,15 +18,13 @@ package com.coollord22.otheranimalteleport.assets;
 
 public enum Verbosity {
     LOW(1), NORMAL(2), HIGH(3), HIGHEST(4), EXTREME(5), DEBUG(6);
-    private int level;
+    private final int level;
 
-    private Verbosity(int lvl) {
+    Verbosity(int lvl) {
         level = lvl;
     }
 
     public boolean exceeds(Verbosity other) {
-        if (level >= other.level)
-            return true;
-        return false;
+        return level >= other.level;
     }
 }

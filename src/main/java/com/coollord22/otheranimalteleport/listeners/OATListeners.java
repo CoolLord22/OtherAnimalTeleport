@@ -34,14 +34,13 @@ public class OATListeners implements Listener {
 				return;
 			}
 
-			/*TODO: Wait for this to be added into 1.19.3*/
 			try {
-				if(event.getCause() == PlayerTeleportEvent.TeleportCause.DISMOUNT) {
-					plugin.log.logInfo("Player dismounted vehicle, ignoring teleport event.", Verbosity.HIGHEST);
+				if(event.getCause() == PlayerTeleportEvent.TeleportCause.DISMOUNT || event.getCause() == PlayerTeleportEvent.TeleportCause.EXIT_BED) {
+					plugin.log.logInfo("Player dismounted vehicle / exited bed, ignoring teleport event.", Verbosity.HIGHEST);
 					return;
 				}
 			} catch(NoSuchFieldError err) {
-				plugin.log.logInfo("Version < 1.19.3 so no DISMOUNT cause found.", Verbosity.HIGHEST);
+				plugin.log.logInfo("Lower version detected, no DISMOUNT or EXIT_BED teleport cause found.", Verbosity.HIGHEST);
 			}
 
 			if(event.getPlayer().hasPermission("otheranimalteleport.player.use")) {

@@ -42,27 +42,24 @@ public class OtherAnimalTeleport extends JavaPlugin {
 	public void onEnable() { 
 		plugin = this;
 		initCommon();
-		Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
-			@Override
-			public void run() {
-				initConfig();
-				registerCommands();
-				registerListeners();
-				if(plugin.config.globalUpdateChecking) {
-					updateChecker = new Updater(plugin);
-					updateChecker.checkForUpdate(null);
-				}
-				new Metrics(plugin, pluginID);
-				plugin.log.logInfo(ChatColor.GREEN + "AnimalTeleport has been enabled!", Verbosity.LOW);
-				plugin.enabled = true;
-
-				String[] serverVersion = (Bukkit.getBukkitVersion().split("-")[0]).split("\\.");
-				if(Integer.parseInt(serverVersion[0]) >= 1)
-					if(Integer.parseInt(serverVersion[1]) >= 14) {
-						toUseTickets = true;
-						plugin.log.logInfo(ChatColor.RED + "Found server version " + serverVersion[0] + "." + serverVersion[1] + " >= 1.14, using chunk tickets!", Verbosity.HIGH);
-					}
+		Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+			initConfig();
+			registerCommands();
+			registerListeners();
+			if(plugin.config.globalUpdateChecking) {
+				updateChecker = new Updater(plugin);
+				updateChecker.checkForUpdate(null);
 			}
+			new Metrics(plugin, pluginID);
+			plugin.log.logInfo(ChatColor.GREEN + "AnimalTeleport has been enabled!", Verbosity.LOW);
+			plugin.enabled = true;
+
+			String[] serverVersion = (Bukkit.getBukkitVersion().split("-")[0]).split("\\.");
+			if(Integer.parseInt(serverVersion[0]) >= 1)
+				if(Integer.parseInt(serverVersion[1]) >= 14) {
+					toUseTickets = true;
+					plugin.log.logInfo(ChatColor.RED + "Found server version " + serverVersion[0] + "." + serverVersion[1] + " >= 1.14, using chunk tickets!", Verbosity.HIGH);
+				}
 		}, 1L);
 		writeNames(EntityType.class);
 	}

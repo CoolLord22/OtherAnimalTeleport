@@ -2,7 +2,6 @@ package com.coollord22.otheranimalteleport.assets;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -25,6 +24,7 @@ import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
+import org.bukkit.event.player.PlayerTeleportEvent;
 
 public class OATConfig {
 	private final OtherAnimalTeleport plugin;
@@ -33,11 +33,11 @@ public class OATConfig {
 	public boolean 					gColorLogMessages;
 	public boolean					globalUpdateChecking;
 	public boolean 					usePrefix = true;
-	public boolean 					ignoreUnknownCauses = false;
 
 	public int 						radius;
 
 	public List<Set<World>> 		worldGroup = new ArrayList<>();
+	public List<PlayerTeleportEvent.TeleportCause> ignoreCauses = new ArrayList<>();
 
 	public HashMap<EntityType, Boolean> entityMap = new HashMap<>();
 
@@ -138,7 +138,6 @@ public class OATConfig {
 		gColorLogMessages = globalConfig.getBoolean("color_log_messages", true);
 		radius = globalConfig.getInt("radius", 2);
 
-		ignoreUnknownCauses = globalConfig.getBoolean("ignore_unknown_causes", false);
 		usePrefix = globalConfig.getBoolean("use_prefix", true);
 		prefix = globalConfig.getString("prefix", "&7[&aOtherAnimalTeleport&7] ");
 
@@ -225,15 +224,20 @@ public class OATConfig {
 			}
 		}
 
+		if(globalConfig.contains("ignore_causes")) {
+			for(String input : globalConfig.getStringList("ignore_causes")) {
+				try {
+					ignoreCauses.add(PlayerTeleportEvent.TeleportCause.valueOf(input));
+				} catch (IllegalArgumentException e) {
+					plugin.log.logWarning("Unrecognized teleport cause (" + input + ")! Skipping...");
+				}
+			}
+		}
+
+		if(globalConfig.contains("ignore_unknown_causes"))
+			plugin.log.logWarning("ignore_unknown_causes is no longer used! Please add the following line to your config: \nignore_causes: [UNKNOWN]");
+
 		plugin.log.logInfo("Loaded global config (" + global + ") with (verbosity=" + verbosity + ")", Verbosity.HIGHEST);
-	}
-
-	public static Verbosity getVerbosity() {
-		return verbosity;
-	}
-
-	public static void setVerbosity(Verbosity verbosity) {
-		OATConfig.verbosity = verbosity;
 	}
 
 	private void copy(InputStream in, File file) {

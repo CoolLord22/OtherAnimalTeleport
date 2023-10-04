@@ -29,18 +29,9 @@ public class OATListeners implements Listener {
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onTeleport(PlayerTeleportEvent event) {
 		if(plugin.enabled && !event.isCancelled()) {
-			if(plugin.config.ignoreUnknownCauses && event.getCause() == PlayerTeleportEvent.TeleportCause.UNKNOWN) {
-				plugin.log.logInfo("Ignore unknown cause was enabled, ignoring this event.", Verbosity.HIGHEST);
+			if(plugin.config.ignoreCauses.contains(event.getCause())) {
+				plugin.log.logInfo("Teleport reason was set to be ignored, skipping this event.", Verbosity.HIGHEST);
 				return;
-			}
-
-			try {
-				if(event.getCause() == PlayerTeleportEvent.TeleportCause.DISMOUNT || event.getCause() == PlayerTeleportEvent.TeleportCause.EXIT_BED) {
-					plugin.log.logInfo("Player dismounted vehicle / exited bed, ignoring teleport event.", Verbosity.HIGHEST);
-					return;
-				}
-			} catch(NoSuchFieldError err) {
-				plugin.log.logInfo("Lower version detected, no DISMOUNT or EXIT_BED teleport cause found.", Verbosity.HIGHEST);
 			}
 
 			if(event.getPlayer().hasPermission("otheranimalteleport.player.use")) {

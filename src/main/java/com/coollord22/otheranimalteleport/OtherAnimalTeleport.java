@@ -4,11 +4,10 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import org.bstats.bukkit.Metrics;
+import org.bstats.charts.AdvancedPie;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.EntityType;
 import org.bukkit.plugin.PluginManager;
@@ -29,6 +28,7 @@ public class OtherAnimalTeleport extends JavaPlugin {
 	public OATCommon common;
 	public Updater updateChecker;
 	public Log log = null;
+	public Metrics metrics = null;
 	public final int pluginID = 8020;
 
 	public boolean enabled;
@@ -50,7 +50,6 @@ public class OtherAnimalTeleport extends JavaPlugin {
 				updateChecker = new Updater(plugin);
 				updateChecker.checkForUpdate(null);
 			}
-			new Metrics(plugin, pluginID);
 			plugin.log.logInfo(ChatColor.GREEN + "AnimalTeleport has been enabled!", Verbosity.LOW);
 			plugin.enabled = true;
 
@@ -85,6 +84,22 @@ public class OtherAnimalTeleport extends JavaPlugin {
 
 	private void registerCommands() {
 		new OtherAnimalCommand(this);
+	}
+
+	public void initMetrics() {
+		if(metrics != null)
+			metrics.shutdown();
+		metrics = new Metrics(plugin, pluginID);
+		Map<String, Integer> allowedEnts = new HashMap<>();
+		Map<String, Integer> deniedEnts = new HashMap<>();
+		for(Map.Entry<EntityType, Boolean> entry : config.entityMap.entrySet()) {
+			if(entry.getValue())
+				allowedEnts.put(entry.getKey().toString(), 1);
+			else
+				deniedEnts.put(entry.getKey().toString(), 1);
+		}
+		metrics.addCustomChart(new AdvancedPie("allowed_entities", () -> allowedEnts));
+		metrics.addCustomChart(new AdvancedPie("denied_entities", () -> deniedEnts));
 	}
 
 	public static void writeNames(Class<? extends Enum<?>> e) {

@@ -43,6 +43,7 @@ public class OATListeners implements Listener {
 					boolean toSendError = false;
 					boolean toSendLeft = false;
 					boolean toSendLeashedLeft = false;
+					boolean toSendTamedLeft = false;
 
 					for(Entity ent : event.getFrom().getWorld().getNearbyEntities(event.getFrom(), radius, radius, radius)) {
 						String entID = "[Ent-" + ent.getEntityId() + "] ";
@@ -71,21 +72,24 @@ public class OATListeners implements Listener {
 							}
 							if(ent instanceof Tameable && event.getPlayer().hasPermission("otheranimalteleport.player.teleportpets")) {
 								plugin.log.logInfo(entID + "Player pet permissions check passed, checking pet owner.", Verbosity.HIGHEST);
-								if(((Tameable) ent).isTamed() && ((Tameable) ent).getOwner() != null && ((Tameable) ent).getOwner().equals(event.getPlayer())) {
-									if(ent instanceof Sittable && !((Sittable) ent).isSitting()) {
-										try {
-											plugin.log.logInfo(entID + "Pet checks passed. Attempting to teleport entity.", Verbosity.HIGH);
-											OATMethods.teleportEnt(ent, event.getFrom(), event.getTo(), event.getPlayer(), plugin);
-											continue;
-										} catch(Exception e) {
-											plugin.log.logInfo(entID + "Teleport reached exception. Sending player error.", Verbosity.HIGHEST);
-											toSendError = true;
-											continue;
+								if(((Tameable) ent).isTamed() && ((Tameable) ent).getOwner() != null) {
+									if(((Tameable) ent).getOwner().equals(event.getPlayer())) {
+										if(ent instanceof Sittable && !((Sittable) ent).isSitting()) {
+											try {
+												plugin.log.logInfo(entID + "Pet checks passed. Attempting to teleport entity.", Verbosity.HIGH);
+												OATMethods.teleportEnt(ent, event.getFrom(), event.getTo(), event.getPlayer(), plugin);
+												continue;
+											} catch(Exception e) {
+												plugin.log.logInfo(entID + "Teleport reached exception. Sending player error.", Verbosity.HIGHEST);
+												toSendError = true;
+												continue;
+											}
 										}
 									}
+									plugin.log.logInfo(entID + "Tamed entity owner matching / sitting check failed. Sending player notification.", Verbosity.HIGHEST);
+									toSendTamedLeft  = true;
 								}
-								plugin.log.logInfo(entID + "Left behind. Sending player notification.", Verbosity.HIGHEST);
-								toSendLeft  = true;
+								plugin.log.logInfo(entID + "Untamed tameable entity left behind.", Verbosity.HIGHEST);
 							}
 						}
 					}
@@ -94,9 +98,11 @@ public class OATListeners implements Listener {
 						plugin.common.sendMessage(plugin.config.usePrefix, plugin.config.failedTeleportMessage, event);
 					}
 
-					if(toSendLeft || toSendLeashedLeft) {
+					if(toSendLeft || toSendLeashedLeft || toSendTamedLeft) {
 						if(toSendLeashedLeft && plugin.config.leftLeashedEntityMessage != null && !plugin.config.leftLeashedEntityMessage.isEmpty())
 							plugin.common.sendMessage(plugin.config.usePrefix, plugin.config.leftLeashedEntityMessage, event);
+						else if(toSendTamedLeft && plugin.config.leftTamedEntityMessage != null && !plugin.config.leftTamedEntityMessage.isEmpty())
+							plugin.common.sendMessage(plugin.config.usePrefix, plugin.config.leftTamedEntityMessage, event);
 						else if(plugin.config.leftEntityMessage != null && !plugin.config.leftEntityMessage.isEmpty())
 							plugin.common.sendMessage(plugin.config.usePrefix, plugin.config.leftEntityMessage, event);
 					}

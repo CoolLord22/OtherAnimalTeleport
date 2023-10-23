@@ -46,6 +46,7 @@ public class OATConfig {
 	public String 					prefix;
 	public String 					failedTeleportMessage;
 	public String 					leftEntityMessage;
+	public String 					leftLeashedEntityMessage;
 
 	public OATConfig(OtherAnimalTeleport plugin) {
 		this.plugin = plugin;
@@ -144,6 +145,7 @@ public class OATConfig {
 		//messages
 		failedTeleportMessage = globalConfig.getString("fail_teleport", "&7An entity could not be teleported and is located near (&c%x&7, &c%y&7, &c%z&7).");
 		leftEntityMessage = globalConfig.getString("entity_left", "&7An entity was left behind near (&c%x&7, &c%y&7, &c%z&7).");
+		leftLeashedEntityMessage = globalConfig.getString("leashed_entity_left", "&7A leashed entity was left behind near (&c%x&7, &c%y&7, &c%z&7).");
 
 		if(globalConfig.contains("blocked_regions")) {
 			for(String input : globalConfig.getStringList("blocked_regions")) {
@@ -237,6 +239,8 @@ public class OATConfig {
 		if(globalConfig.contains("ignore_unknown_causes"))
 			plugin.log.logWarning("ignore_unknown_causes is no longer used! Please add the following line to your config: \nignore_causes: [UNKNOWN]");
 
+		plugin.log.logInfo("Reloading metrics!", Verbosity.HIGHEST);
+		plugin.initMetrics();
 		plugin.log.logInfo("Loaded global config (" + global + ") with (verbosity=" + verbosity + ")", Verbosity.HIGHEST);
 	}
 

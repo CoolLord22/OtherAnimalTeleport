@@ -28,18 +28,16 @@ public class OtherAnimalCommand implements TabExecutor {
 		HELP("help", "otheranimalteleport.player.help"),
 		RELOAD("reload", "otheranimalteleport.admin.reloadconfig");
 
-		private String cmdName;
-		private String perm;
+		private final String cmdName;
+		private final String perm;
 
-		private OATCommand(String name, String perm) {
+		OATCommand(String name, String perm) {
 			cmdName = name;
 			this.perm = perm;
 		}
 
 		public static OATCommand match(String label, String firstArg) {
-			boolean arg = false;
-			if (label.equalsIgnoreCase("oat"))
-				arg = true;
+			boolean arg = label.equalsIgnoreCase("oat");
 			for (OATCommand cmd : values()) {
 				if (arg) {
 					for (String item : cmd.cmdName.split(",")) {
@@ -59,7 +57,7 @@ public class OtherAnimalCommand implements TabExecutor {
 			String[] newArgs = new String[args.length - 1];
 			System.arraycopy(args, 1, newArgs, 0, newArgs.length);
 			if (name != null)
-				name.append(" " + args[0]);
+				name.append(" ").append(args[0]);
 			return newArgs;
 		}
 	}
@@ -68,7 +66,7 @@ public class OtherAnimalCommand implements TabExecutor {
 		if (sender instanceof ConsoleCommandSender)
 			return "CONSOLE";
 		else if (sender instanceof Player)
-			return ((Player) sender).getName();
+			return sender.getName();
 		else
 			return "UNKNOWN";
 	}
@@ -114,15 +112,15 @@ public class OtherAnimalCommand implements TabExecutor {
             return true;
         boolean perm = who.hasPermission(permission);
         if (!perm) {
-        	plugin.log.logInfo("SuperPerms - permission (" + permission + ") denied for " + who.toString(), Verbosity.HIGHEST);
+        	plugin.log.logInfo("SuperPerms - permission (" + permission + ") denied for " + who, Verbosity.HIGHEST);
         } else {
-        	plugin.log.logInfo("SuperPerms - permission (" + permission + ") allowed for " + who.toString(), Verbosity.HIGHEST);
+        	plugin.log.logInfo("SuperPerms - permission (" + permission + ") allowed for " + who, Verbosity.HIGHEST);
         }
         return perm;
     }
 
 	private void cmdHelp(CommandSender sender) {
-		List<String> result = new ArrayList<String>();
+		List<String> result = new ArrayList<>();
 		result.add("&b---------========== Help Page ==========---------");
 		result.add(" &a/oat help&7: see this help page");
 		result.add(" &a/oat reload&7: reload config");

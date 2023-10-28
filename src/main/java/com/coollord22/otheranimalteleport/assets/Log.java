@@ -17,25 +17,20 @@ import com.coollord22.otheranimalteleport.OtherAnimalTeleport;
 public class Log {
     static ConsoleCommandSender console = null;
     static String pluginName = "";
-    static String pluginVersion = "";
-    static Logger logger = Logger.getLogger("Minecraft");
+    static final Logger logger = Logger.getLogger("Minecraft");
     private final OtherAnimalTeleport plugin;
 
     public Log(OtherAnimalTeleport plugin) {
     	this.plugin = plugin;
         if (plugin != null) {
             pluginName = plugin.getDescription().getName();
-            pluginVersion = plugin.getDescription().getVersion();
         }
-        if (Bukkit.getServer() == null)
-            console = null;
-        else
-            console = Bukkit.getServer().getConsoleSender();
+        console = Bukkit.getServer().getConsoleSender();
     }
 
     // LogInfo & Logwarning - display messages with a standard prefix
     public void logWarning(String msg) {
-        Log.logger.warning("[" + pluginName + ":" + pluginVersion + "] " + msg);
+        Log.logger.warning("[" + pluginName + "] " + msg);
     }
 
     public void logInfo(List<String> msgs) {
@@ -49,28 +44,21 @@ public class Log {
 
     public void logInfo(String msg) {
         if (OATConfig.verbosity.exceeds(Verbosity.NORMAL))
-            Log.logger.info("[" + pluginName + ":" + pluginVersion + "] " + msg);
-    }
-
-    public void logInfoNoVerbosity(String msg) {
-        Log.logger.info("[" + pluginName + ":" + pluginVersion + "] " + msg);
+            Log.logger.info("[" + pluginName + "] " + msg);
     }
 
     /**
      * dMsg - used for debug messages that are expected to be removed before
      * distribution
-     * 
-     * @param msg
+     *
+     * @param msg - msg to log
      */
     public void dMsg(String msg) {
-        // Deliberately doesn't check gColorLogMessage as I want these messages
-        // to stand out in case they
-        // are left in by accident
         if (OATConfig.verbosity.exceeds(Verbosity.HIGHEST))
             if (console != null && plugin.config.gColorLogMessages) {
-                console.sendMessage(ChatColor.RED + "[" + pluginName + ":" + pluginVersion + "] " + ChatColor.RESET + msg);
+                console.sendMessage(ChatColor.RED + "[" + pluginName + "] " + ChatColor.RESET + msg);
             } else {
-                Log.logger.info("[" + pluginName + ":" + pluginVersion + "] " + msg);
+                Log.logger.info("[" + pluginName + "] " + msg);
             }
     }
 
@@ -91,17 +79,15 @@ public class Log {
                     col = ChatColor.AQUA;
                     break;
                 case NORMAL:
-                    col = ChatColor.RESET;
+                    case LOW:
+                        col = ChatColor.RESET;
                     break;
-                case LOW:
-                    col = ChatColor.RESET;
-                    break;
-                default:
+                    default:
                     break;
                 }
-                console.sendMessage(col + "[" + pluginName + ":" + pluginVersion + "] " + ChatColor.RESET + msg);
+                console.sendMessage(col + "[" + pluginName + "] " + ChatColor.RESET + msg);
             } else {
-                Log.logger.info("[" + pluginName + ":" + pluginVersion + "] " + msg);
+                Log.logger.info("[" + pluginName + "] " + msg);
             }
         }
     }
@@ -109,11 +95,5 @@ public class Log {
     public void logWarning(String msg, Verbosity level) {
         if (OATConfig.verbosity.exceeds(level))
             logWarning(msg);
-    }
-
-    // TODO: This is only for temporary debug purposes.
-    public void stackTrace() {
-        if (OATConfig.verbosity.exceeds(Verbosity.EXTREME))
-            Thread.dumpStack();
     }
 }

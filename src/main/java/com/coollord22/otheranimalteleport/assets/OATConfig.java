@@ -2,10 +2,10 @@ package com.coollord22.otheranimalteleport.assets;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -24,6 +24,7 @@ import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
+import org.bukkit.event.player.PlayerTeleportEvent;
 
 public class OATConfig {
 	private final OtherAnimalTeleport plugin;
@@ -32,55 +33,59 @@ public class OATConfig {
 	public boolean 					gColorLogMessages;
 	public boolean					globalUpdateChecking;
 	public boolean 					usePrefix = true;
-	public boolean 					ignoreUnknownCauses = false;
 
 	public int 						radius;
 
-	public List<Set<World>> 		worldGroup = new ArrayList<Set<World>>();
-	public List<EntityType> 		allowedEnts = new ArrayList<EntityType>();
+	public List<Set<World>> 		worldGroup = new ArrayList<>();
+	public List<PlayerTeleportEvent.TeleportCause> ignoreCauses = new ArrayList<>();
+
+	public HashMap<EntityType, Boolean> entityMap = new HashMap<>();
+
 	public HashMap<World, Set<ProtectedRegion>> blockedRegions = new HashMap<>();
 
 	public String 					prefix;
 	public String 					failedTeleportMessage;
 	public String 					leftEntityMessage;
+	public String 					leftLeashedEntityMessage;
+	public String 					leftTamedEntityMessage;
 
 	public OATConfig(OtherAnimalTeleport plugin) {
 		this.plugin = plugin;
 	}
 
 	public void load(CommandSender sender) {
-		List<String> result = new ArrayList<String>();
+		List<String> result = new ArrayList<>();
 		try { 
 			firstRun();
 			loadConfig();
 		} catch (FileNotFoundException e) {
 			if (verbosity.exceeds(Verbosity.HIGH)) e.printStackTrace();
 			result.add("Config file not found!");
-			result.add("The error was:\n" + e.toString());
+			result.add("The error was:\n" + e);
 			result.add("You can fix the error and reload with /orr.");
 			sendMessage(sender, result);
 		} catch (IOException e) {
 			if (verbosity.exceeds(Verbosity.HIGH)) e.printStackTrace();
 			result.add("There was an IO error which has forced OtherDrops to abort loading!");
-			result.add("The error was:\n" + e.toString());
+			result.add("The error was:\n" + e);
 			result.add("You can fix the error and reload with /orr.");
 			sendMessage(sender, result);
 		} catch (InvalidConfigurationException e) {
 			if (verbosity.exceeds(Verbosity.HIGH)) e.printStackTrace();
 			result.add("Config is invalid!");
-			result.add("The error was:\n" + e.toString());
+			result.add("The error was:\n" + e);
 			result.add("You can fix the error and reload with /orr.");
 			sendMessage(sender, result);
 		} catch (NullPointerException e) {
 			result.add("Config load failed!");
-			result.add("The error was:\n" + e.toString());
+			result.add("The error was:\n" + e);
 			if (verbosity.exceeds(Verbosity.NORMAL)) e.printStackTrace();
 			result.add("Please try the latest version & report this issue to the developer if the problem remains.");
 			sendMessage(sender, result);
 		} catch (Exception e) {
 			if (verbosity.exceeds(Verbosity.HIGH)) e.printStackTrace();
 			result.add("Config load failed!  Something went wrong.");
-			result.add("The error was:\n" + e.toString());
+			result.add("The error was:\n" + e);
 			result.add("If you can fix the error, reload with /orr.");
 			sendMessage(sender, result);
 		}
@@ -93,8 +98,8 @@ public class OATConfig {
 		plugin.log.logInfo(result);
 	}
 
-	private void firstRun() throws Exception {
-		List<String> files = new ArrayList<String>();
+	private void firstRun() {
+		List<String> files = new ArrayList<>();
 		files.add("config.yml");
 
 		for (String filename : files) {
@@ -107,7 +112,7 @@ public class OATConfig {
 	}
 
 	@SuppressWarnings("unchecked")
-	public void loadConfig() throws FileNotFoundException, IOException, InvalidConfigurationException {
+	public void loadConfig() throws IOException, InvalidConfigurationException {
 		String filename = "config.yml";
 		File global = new File(plugin.getDataFolder(), filename);
 		YamlConfiguration globalConfig = YamlConfiguration.loadConfiguration(global);
@@ -118,9 +123,7 @@ public class OATConfig {
 				global.createNewFile(); 
 				plugin.log.logInfo("Created a config file " + plugin.getDataFolder() + "\\" + filename + ", please edit it!");
 				globalConfig.save(global);
-			} catch (IOException ex) {
-				plugin.log.logWarning(plugin.getDescription().getName() + ": could not generate " + filename + ". Are the file permissions OK?");
-			} catch (Exception e) {
+			} catch (Exception ex) {
 				plugin.log.logWarning(plugin.getDescription().getName() + ": could not generate " + filename + ". Are the file permissions OK?");
 			}
 		}
@@ -129,7 +132,7 @@ public class OATConfig {
 		globalConfig.load(global);
 
 		worldGroup.clear();
-		allowedEnts.clear();
+		entityMap.clear();
 		blockedRegions.clear();
 
 		verbosity = OATCommon.getConfigVerbosity(globalConfig);
@@ -137,13 +140,14 @@ public class OATConfig {
 		gColorLogMessages = globalConfig.getBoolean("color_log_messages", true);
 		radius = globalConfig.getInt("radius", 2);
 
-		ignoreUnknownCauses = globalConfig.getBoolean("ignore_unknown_causes", false);
 		usePrefix = globalConfig.getBoolean("use_prefix", true);
 		prefix = globalConfig.getString("prefix", "&7[&aOtherAnimalTeleport&7] ");
 
 		//messages
 		failedTeleportMessage = globalConfig.getString("fail_teleport", "&7An entity could not be teleported and is located near (&c%x&7, &c%y&7, &c%z&7).");
 		leftEntityMessage = globalConfig.getString("entity_left", "&7An entity was left behind near (&c%x&7, &c%y&7, &c%z&7).");
+		leftLeashedEntityMessage = globalConfig.getString("leashed_entity_left", "&7A leashed entity was left behind near (&c%x&7, &c%y&7, &c%z&7).");
+		leftTamedEntityMessage = globalConfig.getString("tamed_entity_left", "&7A tamed pet was left behind near (&c%x&7, &c%y&7, &c%z&7).");
 
 		if(globalConfig.contains("blocked_regions")) {
 			for(String input : globalConfig.getStringList("blocked_regions")) {
@@ -178,7 +182,7 @@ public class OATConfig {
 
 		if(globalConfig.contains("world_groups")) {
 			for(Object input : globalConfig.getList("world_groups")) {
-				Set<World> worldList = new HashSet<World>();
+				Set<World> worldList = new HashSet<>();
 				for(String inputWorld : (ArrayList<String>)input) {
 					boolean foundMatch = false;
 					for(World knownWorld : Bukkit.getWorlds()) {
@@ -200,15 +204,21 @@ public class OATConfig {
 				if(input.equals("ANY") || input.equals("ALL")) {
 					for(EntityType entType : EntityType.values()) {
 						if(entType.isAlive() && !(entType.equals(EntityType.valueOf("PLAYER"))))
-							allowedEnts.add(entType);
+							entityMap.put(entType, true);
 					}
 				} 
 				else {
 					boolean foundMatch = false;
 					for(EntityType entType : EntityType.values()) {
-						if(input.equalsIgnoreCase(entType.toString())) {
+						if(input.startsWith("-")) {
+							if(input.substring(1).equalsIgnoreCase(entType.toString())) {
+								foundMatch = true;
+								entityMap.put(entType, false);
+							}
+						}
+						else if(input.equalsIgnoreCase(entType.toString())) {
 							foundMatch = true;
-							allowedEnts.add(entType);
+							entityMap.put(entType, true);
 						}
 					}
 					if(!foundMatch) {
@@ -218,20 +228,27 @@ public class OATConfig {
 			}
 		}
 
+		if(globalConfig.contains("ignore_causes")) {
+			for(String input : globalConfig.getStringList("ignore_causes")) {
+				try {
+					ignoreCauses.add(PlayerTeleportEvent.TeleportCause.valueOf(input));
+				} catch (IllegalArgumentException e) {
+					plugin.log.logWarning("Unrecognized teleport cause (" + input + ")! Skipping...");
+				}
+			}
+		}
+
+		if(globalConfig.contains("ignore_unknown_causes"))
+			plugin.log.logWarning("ignore_unknown_causes is no longer used! Please add the following line to your config: \nignore_causes: [UNKNOWN]");
+
+		plugin.log.logInfo("Reloading metrics!", Verbosity.HIGHEST);
+		plugin.initMetrics();
 		plugin.log.logInfo("Loaded global config (" + global + ") with (verbosity=" + verbosity + ")", Verbosity.HIGHEST);
-	}
-
-	public static Verbosity getVerbosity() {
-		return verbosity;
-	}
-
-	public static void setVerbosity(Verbosity verbosity) {
-		OATConfig.verbosity = verbosity;
 	}
 
 	private void copy(InputStream in, File file) {
 		try {
-			OutputStream out = new FileOutputStream(file);
+			OutputStream out = Files.newOutputStream(file.toPath());
 			byte[] buf = new byte[1024];
 			int len;
 			while ((len = in.read(buf)) > 0) {

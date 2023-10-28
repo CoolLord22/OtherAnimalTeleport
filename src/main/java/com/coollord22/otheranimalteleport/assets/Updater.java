@@ -18,7 +18,7 @@ import com.coollord22.otheranimalteleport.OtherAnimalTeleport;
 public class Updater {
 
 	private final OtherAnimalTeleport plugin;
-	private String localPluginVersion;
+	private final String localPluginVersion;
 	private String spigotPluginVersion;
 
 	private static final int ID = 63497;
@@ -30,7 +30,7 @@ public class Updater {
 	}
 
 	public void checkForUpdate(Player p) {
-		List<String> UPDATE_MSG = new ArrayList<String>();
+		List<String> UPDATE_MSG = new ArrayList<>();
 		Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
 			//Request current spigot version
 			try {

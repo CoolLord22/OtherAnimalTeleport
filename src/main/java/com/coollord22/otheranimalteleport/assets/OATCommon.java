@@ -54,11 +54,13 @@ public class OATCommon {
         World toWorld = event.getTo().getWorld();
 
         // Blocked region check
-        if(plugin.config.blockedRegions.containsKey(toWorld)) {
-            for(ProtectedRegion region : plugin.config.blockedRegions.get(toWorld)) {
-                if(region.contains(BlockVector3.at(event.getTo().getX(), event.getTo().getY(), event.getTo().getZ()))) {
-                    plugin.log.logInfo("Player teleporting into a blocked region; ignoring entity checks.", Verbosity.HIGHEST);
-                    return false;
+        if(plugin.getServer().getPluginManager().isPluginEnabled("WorldGuard")) {
+            if(plugin.config.blockedRegions.containsKey(toWorld)) {
+                for(ProtectedRegion region : plugin.config.blockedRegions.get(toWorld)) {
+                    if(region.contains(BlockVector3.at(event.getTo().getX(), event.getTo().getY(), event.getTo().getZ()))) {
+                        plugin.log.logInfo("Player teleporting into a blocked region; ignoring entity checks.", Verbosity.HIGHEST);
+                        return false;
+                    }
                 }
             }
         }

@@ -149,34 +149,35 @@ public class OATConfig {
 		leftLeashedEntityMessage = globalConfig.getString("leashed_entity_left", "&7A leashed entity was left behind near (&c%x&7, &c%y&7, &c%z&7).");
 		leftTamedEntityMessage = globalConfig.getString("tamed_entity_left", "&7A tamed pet was left behind near (&c%x&7, &c%y&7, &c%z&7).");
 
-		if(globalConfig.contains("blocked_regions")) {
-			for(String input : globalConfig.getStringList("blocked_regions")) {
-				String[] splitRegion = input.split("@", 2);
-				if(splitRegion.length != 2) {
-					plugin.log.logWarning("Improper world@region formatting, please check input again (" + input + ")! Skipping...");
-					continue;
-				}
-				
-				World regionWorld = Bukkit.getWorld(splitRegion[0]);
-				if(regionWorld == null) {
-					plugin.log.logWarning("Unrecognized world for blocked_regions, please check world name (" + input + ")! Skipping...");
-					continue;
-				}
-				
-				RegionManager regionManager = WorldGuard.getInstance().getPlatform().getRegionContainer().get(BukkitAdapter.adapt(regionWorld));
-				ProtectedRegion regionToAdd = regionManager.getRegion(splitRegion[1]);
-				if(regionToAdd == null) {
-					plugin.log.logWarning("Unrecognized region for blocked_regions, please check region name (" + input + ")! Skipping...");
-					continue;
-				}
-				
-				Set<ProtectedRegion> regionList = new HashSet<>();
-				if(blockedRegions.containsKey(regionWorld)) {
-					regionList = blockedRegions.get(regionWorld);
-				}
-				regionList.add(regionToAdd);
-				blockedRegions.put(regionWorld, regionList);
+		if(plugin.getServer().getPluginManager().isPluginEnabled("WorldGuard")) {
+			if(globalConfig.contains("blocked_regions")) {
+				for(String input : globalConfig.getStringList("blocked_regions")) {
+					String[] splitRegion = input.split("@", 2);
+					if(splitRegion.length != 2) {
+						plugin.log.logWarning("Improper world@region formatting, please check input again (" + input + ")! Skipping...");
+						continue;
+					}
 
+					World regionWorld = Bukkit.getWorld(splitRegion[0]);
+					if(regionWorld == null) {
+						plugin.log.logWarning("Unrecognized world for blocked_regions, please check world name (" + input + ")! Skipping...");
+						continue;
+					}
+
+					RegionManager regionManager = WorldGuard.getInstance().getPlatform().getRegionContainer().get(BukkitAdapter.adapt(regionWorld));
+					ProtectedRegion regionToAdd = regionManager.getRegion(splitRegion[1]);
+					if(regionToAdd == null) {
+						plugin.log.logWarning("Unrecognized region for blocked_regions, please check region name (" + input + ")! Skipping...");
+						continue;
+					}
+
+					Set<ProtectedRegion> regionList = new HashSet<>();
+					if(blockedRegions.containsKey(regionWorld)) {
+						regionList = blockedRegions.get(regionWorld);
+					}
+					regionList.add(regionToAdd);
+					blockedRegions.put(regionWorld, regionList);
+				}
 			}
 		}
 

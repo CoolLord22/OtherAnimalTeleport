@@ -29,6 +29,7 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 public class OATConfig {
 	private final OtherAnimalTeleport plugin;
 
+	// Config values
 	protected static Verbosity 		verbosity = Verbosity.NORMAL;
 	public boolean 					gColorLogMessages;
 	public boolean					globalUpdateChecking;
@@ -37,13 +38,14 @@ public class OATConfig {
 
 	public int 						radius;
 
-	public List<Set<World>> 		worldGroup = new ArrayList<>();
+	public List<HashSet<String>> 	worldGroup = new ArrayList<>();
 	public HashSet<PlayerTeleportEvent.TeleportCause> ignoreCauses = new HashSet<>();
 
 	public HashMap<EntityType, Boolean> entityMap = new HashMap<>();
 
 	public HashMap<World, Set<ProtectedRegion>> blockedRegions = new HashMap<>();
 
+	// Message handling
 	public String 					prefix;
 	public String 					failedTeleportMessage;
 	public String 					leftEntityMessage;
@@ -186,13 +188,13 @@ public class OATConfig {
 
 		if(globalConfig.contains("world_groups")) {
 			for(Object input : globalConfig.getList("world_groups")) {
-				Set<World> worldList = new HashSet<>();
+				HashSet<String> worldList = new HashSet<>();
 				for(String inputWorld : (ArrayList<String>)input) {
 					boolean foundMatch = false;
 					for(World knownWorld : Bukkit.getWorlds()) {
 						if(knownWorld.getName().equalsIgnoreCase(inputWorld)) {
 							foundMatch = true;
-							worldList.add(knownWorld);
+							worldList.add(knownWorld.getName());
 						}
 					}
 					if(!foundMatch) {

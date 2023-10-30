@@ -13,6 +13,7 @@ import com.coollord22.otheranimalteleport.OtherAnimalTeleport;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
 import java.text.DecimalFormat;
+import java.util.HashSet;
 import java.util.Set;
 
 public class OATCommon {
@@ -82,8 +83,8 @@ public class OATCommon {
         if(fromWorld.equals(toWorld)) {
             return true;
         } else {
-            for(Set<World> worldList : plugin.config.worldGroup) {
-                if(worldList.contains(fromWorld) && worldList.contains(toWorld)) {
+            for(HashSet<String> worldList : plugin.config.worldGroup) {
+                if(worldList.contains(fromWorld.getName()) && worldList.contains(toWorld.getName())) {
                     return true;
                 }
             }

@@ -33,6 +33,7 @@ public class OATConfig {
 	public boolean 					gColorLogMessages;
 	public boolean					globalUpdateChecking;
 	public boolean 					usePrefix = true;
+	public boolean 					preventAdminClaims = false;
 
 	public int 						radius;
 
@@ -138,6 +139,7 @@ public class OATConfig {
 		verbosity = OATCommon.getConfigVerbosity(globalConfig);
 		globalUpdateChecking = globalConfig.getBoolean("update_checker", true);
 		gColorLogMessages = globalConfig.getBoolean("color_log_messages", true);
+		preventAdminClaims = globalConfig.getBoolean("prevent_gd_admin_claims", false);
 		radius = globalConfig.getInt("radius", 2);
 
 		usePrefix = globalConfig.getBoolean("use_prefix", true);

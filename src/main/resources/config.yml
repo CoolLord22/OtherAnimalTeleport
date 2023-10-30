@@ -13,6 +13,10 @@ update_checker: true
 color_log_messages: true
 
 #######################
+# Prevent players from bringing animals into GriefDefender admin claims
+prevent_gd_admin_claims: false
+
+#######################
 # Radius for the area around the player
 radius: 2
 

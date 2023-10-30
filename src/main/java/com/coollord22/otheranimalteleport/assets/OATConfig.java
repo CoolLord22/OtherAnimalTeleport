@@ -38,7 +38,7 @@ public class OATConfig {
 	public int 						radius;
 
 	public List<Set<World>> 		worldGroup = new ArrayList<>();
-	public List<PlayerTeleportEvent.TeleportCause> ignoreCauses = new ArrayList<>();
+	public HashSet<PlayerTeleportEvent.TeleportCause> ignoreCauses = new HashSet<>();
 
 	public HashMap<EntityType, Boolean> entityMap = new HashMap<>();
 
@@ -135,6 +135,7 @@ public class OATConfig {
 		worldGroup.clear();
 		entityMap.clear();
 		blockedRegions.clear();
+		ignoreCauses.clear();
 
 		verbosity = OATCommon.getConfigVerbosity(globalConfig);
 		globalUpdateChecking = globalConfig.getBoolean("update_checker", true);

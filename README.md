@@ -41,6 +41,10 @@ If you really enjoy this plugin, please drop a review (hopefully 5 stars ;)). If
 The reviews section is meant for actual reviews, not to degrade the plugin, make a feature request, or get help. Please don't leave negative reviews on amazing plugins in an attempt to get the authors' attention. Believe me, we DO pay attention to every ticket, issue, discussion comment, etc. Leaving bad reviews to "get our attention" just makes us that much less likely to help you out. If you honestly need help, leave a comment on the Discussions page.
 If you have a feature you want to see in the plugin, leave a comment on the Discussions page and I'll try to respond ASAP.
 
+### Metrics
+[![](https://bstats.org/signatures/bukkit/OtherAnimalTeleport.svg?sanitize=true)](https://bstats.org/plugin/bukkit/OtherAnimalTeleport/8020)
+Powered by [bStats](https://bstats.org/)
+
 [discordImg]: https://img.shields.io/discord/418432278113550337.svg?logo=discord&logoWidth=18&colorB=7289DA
 
 [discordLink]: https://discordapp.com/invite/eHBxk5q

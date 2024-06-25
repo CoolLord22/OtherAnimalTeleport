@@ -48,7 +48,6 @@ public class OATListeners implements Listener {
 					for(Entity ent : event.getFrom().getWorld().getNearbyEntities(event.getFrom(), radius, radius, radius)) {
 						String entID = "[Ent-" + ent.getEntityId() + "] ";
 
-						// Check if entity type is allowed by plugin
 						plugin.log.logInfo(entID + "Found a(n) " + ent.getType() + ". Checking if type is allowed...", Verbosity.HIGH);
 						if(plugin.config.entityMap.get(ent.getType()) != null && plugin.config.entityMap.get(ent.getType())) {
 							plugin.log.logInfo(entID + "Entity-type check passed, checking player permissions.", Verbosity.HIGHEST);
@@ -66,7 +65,6 @@ public class OATListeners implements Listener {
 											continue;
 										}
 									}
-									// Leash holder did not match, send message
 									plugin.log.logInfo(entID + "Leash holder check failed. Sending player notification.", Verbosity.HIGHEST);
 									toSendLeashedLeft = true;
 								}
@@ -74,7 +72,6 @@ public class OATListeners implements Listener {
 								toSendLeft  = true;
 							}
 							if(ent instanceof Tameable && event.getPlayer().hasPermission("otheranimalteleport.player.teleportpets")) {
-								// Check if entity's owner is teleporting player
 								plugin.log.logInfo(entID + "Player pet permissions check passed, checking pet owner...", Verbosity.HIGHEST);
 								if(((Tameable) ent).isTamed() && ((Tameable) ent).getOwner() != null) {
 									if(((Tameable) ent).getOwner().equals(event.getPlayer())) {

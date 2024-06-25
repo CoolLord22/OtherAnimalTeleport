@@ -47,7 +47,9 @@ public class OATListeners implements Listener {
 
 					for(Entity ent : event.getFrom().getWorld().getNearbyEntities(event.getFrom(), radius, radius, radius)) {
 						String entID = "[Ent-" + ent.getEntityId() + "] ";
-						plugin.log.logInfo(entID + "Found a(n) " + ent.getType() + ". Checking if type is allowed.", Verbosity.HIGH);
+
+						// Check if entity type is allowed by plugin
+						plugin.log.logInfo(entID + "Found a(n) " + ent.getType() + ". Checking if type is allowed...", Verbosity.HIGH);
 						if(plugin.config.entityMap.get(ent.getType()) != null && plugin.config.entityMap.get(ent.getType())) {
 							plugin.log.logInfo(entID + "Entity-type check passed, checking player permissions.", Verbosity.HIGHEST);
 							if(ent instanceof LivingEntity && event.getPlayer().hasPermission("otheranimalteleport.player.teleportleashed")) {
@@ -55,7 +57,7 @@ public class OATListeners implements Listener {
 								if(((LivingEntity) ent).isLeashed()) {
 									if(((LivingEntity) ent).getLeashHolder().equals(event.getPlayer())) {
 										try {
-											plugin.log.logInfo(entID + "Leash owner passed. Attempting to teleport entity.", Verbosity.HIGH);
+											plugin.log.logInfo(entID + "Leash holder passed. Attempting to teleport entity.", Verbosity.HIGH);
 											OATMethods.teleportLeashedEnt(ent, event.getFrom(), event.getTo(), event.getPlayer(), plugin);
 											continue;
 										} catch(Exception e) {
@@ -64,14 +66,16 @@ public class OATListeners implements Listener {
 											continue;
 										}
 									}
-									plugin.log.logInfo(entID + "Leash owner check failed. Sending player notification.", Verbosity.HIGHEST);
+									// Leash holder did not match, send message
+									plugin.log.logInfo(entID + "Leash holder check failed. Sending player notification.", Verbosity.HIGHEST);
 									toSendLeashedLeft = true;
 								}
 								plugin.log.logInfo(entID + "Left behind. Sending player notification.", Verbosity.HIGHEST);
 								toSendLeft  = true;
 							}
 							if(ent instanceof Tameable && event.getPlayer().hasPermission("otheranimalteleport.player.teleportpets")) {
-								plugin.log.logInfo(entID + "Player pet permissions check passed, checking pet owner.", Verbosity.HIGHEST);
+								// Check if entity's owner is teleporting player
+								plugin.log.logInfo(entID + "Player pet permissions check passed, checking pet owner...", Verbosity.HIGHEST);
 								if(((Tameable) ent).isTamed() && ((Tameable) ent).getOwner() != null) {
 									if(((Tameable) ent).getOwner().equals(event.getPlayer())) {
 										if(ent instanceof Sittable && !((Sittable) ent).isSitting()) {

@@ -31,7 +31,6 @@ public class OATMethods {
 			public void run() {
 				plugin.log.logInfo(entID + "Protecting entity with invulnerability and resistance.", Verbosity.HIGHEST);
 				ent.setInvulnerable(true);
-				((LivingEntity) ent).addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 40, 5));
 
 				plugin.log.logInfo(entID + "Teleporting entity " + ent.getType(), Verbosity.HIGH);
 				ent.teleport(to);
@@ -65,9 +64,8 @@ public class OATMethods {
 			public void run() {
 				plugin.log.logInfo(entID + "Protecting entity with invulnerability and resistance.", Verbosity.HIGHEST);
 				ent.setInvulnerable(true);
-				((LivingEntity) ent).addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 40, 5));
 
-				plugin.log.logInfo(entID + "Teleporting entity" + ent.getType(), Verbosity.HIGH);
+				plugin.log.logInfo(entID + "Teleporting entity " + ent.getType(), Verbosity.HIGH);
 				ent.teleport(to);
 
 				if(plugin.toUseTickets) {

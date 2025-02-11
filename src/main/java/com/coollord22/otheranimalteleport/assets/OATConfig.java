@@ -29,20 +29,23 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 public class OATConfig {
 	private final OtherAnimalTeleport plugin;
 
+	// Config values
 	protected static Verbosity 		verbosity = Verbosity.NORMAL;
 	public boolean 					gColorLogMessages;
 	public boolean					globalUpdateChecking;
 	public boolean 					usePrefix = true;
+	public boolean 					preventAdminClaims = false;
 
 	public int 						radius;
 
-	public List<Set<World>> 		worldGroup = new ArrayList<>();
-	public List<PlayerTeleportEvent.TeleportCause> ignoreCauses = new ArrayList<>();
+	public List<HashSet<String>> 	worldGroup = new ArrayList<>();
+	public HashSet<PlayerTeleportEvent.TeleportCause> ignoreCauses = new HashSet<>();
 
 	public HashMap<EntityType, Boolean> entityMap = new HashMap<>();
 
 	public HashMap<World, Set<ProtectedRegion>> blockedRegions = new HashMap<>();
 
+	// Message handling
 	public String 					prefix;
 	public String 					failedTeleportMessage;
 	public String 					leftEntityMessage;
@@ -134,10 +137,12 @@ public class OATConfig {
 		worldGroup.clear();
 		entityMap.clear();
 		blockedRegions.clear();
+		ignoreCauses.clear();
 
 		verbosity = OATCommon.getConfigVerbosity(globalConfig);
 		globalUpdateChecking = globalConfig.getBoolean("update_checker", true);
 		gColorLogMessages = globalConfig.getBoolean("color_log_messages", true);
+		preventAdminClaims = globalConfig.getBoolean("prevent_gd_admin_claims", false);
 		radius = globalConfig.getInt("radius", 2);
 
 		usePrefix = globalConfig.getBoolean("use_prefix", true);
@@ -149,46 +154,47 @@ public class OATConfig {
 		leftLeashedEntityMessage = globalConfig.getString("leashed_entity_left", "&7A leashed entity was left behind near (&c%x&7, &c%y&7, &c%z&7).");
 		leftTamedEntityMessage = globalConfig.getString("tamed_entity_left", "&7A tamed pet was left behind near (&c%x&7, &c%y&7, &c%z&7).");
 
-		if(globalConfig.contains("blocked_regions")) {
-			for(String input : globalConfig.getStringList("blocked_regions")) {
-				String[] splitRegion = input.split("@", 2);
-				if(splitRegion.length != 2) {
-					plugin.log.logWarning("Improper world@region formatting, please check input again (" + input + ")! Skipping...");
-					continue;
-				}
-				
-				World regionWorld = Bukkit.getWorld(splitRegion[0]);
-				if(regionWorld == null) {
-					plugin.log.logWarning("Unrecognized world for blocked_regions, please check world name (" + input + ")! Skipping...");
-					continue;
-				}
-				
-				RegionManager regionManager = WorldGuard.getInstance().getPlatform().getRegionContainer().get(BukkitAdapter.adapt(regionWorld));
-				ProtectedRegion regionToAdd = regionManager.getRegion(splitRegion[1]);
-				if(regionToAdd == null) {
-					plugin.log.logWarning("Unrecognized region for blocked_regions, please check region name (" + input + ")! Skipping...");
-					continue;
-				}
-				
-				Set<ProtectedRegion> regionList = new HashSet<>();
-				if(blockedRegions.containsKey(regionWorld)) {
-					regionList = blockedRegions.get(regionWorld);
-				}
-				regionList.add(regionToAdd);
-				blockedRegions.put(regionWorld, regionList);
+		if(plugin.getServer().getPluginManager().isPluginEnabled("WorldGuard")) {
+			if(globalConfig.contains("blocked_regions")) {
+				for(String input : globalConfig.getStringList("blocked_regions")) {
+					String[] splitRegion = input.split("@", 2);
+					if(splitRegion.length != 2) {
+						plugin.log.logWarning("Improper world@region formatting, please check input again (" + input + ")! Skipping...");
+						continue;
+					}
 
+					World regionWorld = Bukkit.getWorld(splitRegion[0]);
+					if(regionWorld == null) {
+						plugin.log.logWarning("Unrecognized world for blocked_regions, please check world name (" + input + ")! Skipping...");
+						continue;
+					}
+
+					RegionManager regionManager = WorldGuard.getInstance().getPlatform().getRegionContainer().get(BukkitAdapter.adapt(regionWorld));
+					ProtectedRegion regionToAdd = regionManager.getRegion(splitRegion[1]);
+					if(regionToAdd == null) {
+						plugin.log.logWarning("Unrecognized region for blocked_regions, please check region name (" + input + ")! Skipping...");
+						continue;
+					}
+
+					Set<ProtectedRegion> regionList = new HashSet<>();
+					if(blockedRegions.containsKey(regionWorld)) {
+						regionList = blockedRegions.get(regionWorld);
+					}
+					regionList.add(regionToAdd);
+					blockedRegions.put(regionWorld, regionList);
+				}
 			}
 		}
 
 		if(globalConfig.contains("world_groups")) {
 			for(Object input : globalConfig.getList("world_groups")) {
-				Set<World> worldList = new HashSet<>();
+				HashSet<String> worldList = new HashSet<>();
 				for(String inputWorld : (ArrayList<String>)input) {
 					boolean foundMatch = false;
 					for(World knownWorld : Bukkit.getWorlds()) {
 						if(knownWorld.getName().equalsIgnoreCase(inputWorld)) {
 							foundMatch = true;
-							worldList.add(knownWorld);
+							worldList.add(knownWorld.getName());
 						}
 					}
 					if(!foundMatch) {

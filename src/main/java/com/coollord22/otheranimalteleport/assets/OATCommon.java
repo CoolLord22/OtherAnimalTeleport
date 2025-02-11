@@ -1,5 +1,7 @@
 package com.coollord22.otheranimalteleport.assets;
 
+import com.griefdefender.api.GriefDefender;
+import com.griefdefender.api.claim.Claim;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import org.bukkit.ChatColor;
@@ -11,6 +13,7 @@ import com.coollord22.otheranimalteleport.OtherAnimalTeleport;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
 import java.text.DecimalFormat;
+import java.util.HashSet;
 import java.util.Set;
 
 public class OATCommon {
@@ -53,11 +56,24 @@ public class OATCommon {
         World fromWorld = event.getFrom().getWorld();
         World toWorld = event.getTo().getWorld();
 
-        // Blocked region check
-        if(plugin.config.blockedRegions.containsKey(toWorld)) {
-            for(ProtectedRegion region : plugin.config.blockedRegions.get(toWorld)) {
-                if(region.contains(BlockVector3.at(event.getTo().getX(), event.getTo().getY(), event.getTo().getZ()))) {
-                    plugin.log.logInfo("Player teleporting into a blocked region; ignoring entity checks.", Verbosity.HIGHEST);
+        // WorldGuard blocked region check
+        if(plugin.getServer().getPluginManager().isPluginEnabled("WorldGuard")) {
+            if(plugin.config.blockedRegions.containsKey(toWorld)) {
+                for(ProtectedRegion region : plugin.config.blockedRegions.get(toWorld)) {
+                    if(region.contains(BlockVector3.at(event.getTo().getX(), event.getTo().getY(), event.getTo().getZ()))) {
+                        plugin.log.logInfo("Player teleporting into a blocked region; ignoring entity checks.", Verbosity.HIGH);
+                        return false;
+                    }
+                }
+            }
+        }
+
+        // GriefDefender Admin claim check
+        if(plugin.getServer().getPluginManager().isPluginEnabled("GriefDefender")) {
+            if(plugin.config.preventAdminClaims) {
+                final Claim claim = GriefDefender.getCore().getClaimAt(event.getTo());
+                if (claim != null && claim.isAdminClaim()) {
+                    plugin.log.logInfo("Player teleporting into an admin claim; ignoring entity checks.", Verbosity.HIGH);
                     return false;
                 }
             }
@@ -67,8 +83,8 @@ public class OATCommon {
         if(fromWorld.equals(toWorld)) {
             return true;
         } else {
-            for(Set<World> worldList : plugin.config.worldGroup) {
-                if(worldList.contains(fromWorld) && worldList.contains(toWorld)) {
+            for(HashSet<String> worldList : plugin.config.worldGroup) {
+                if(worldList.contains(fromWorld.getName()) && worldList.contains(toWorld.getName())) {
                     return true;
                 }
             }

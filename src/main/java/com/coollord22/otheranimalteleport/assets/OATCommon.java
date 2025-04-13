@@ -1,5 +1,6 @@
 package com.coollord22.otheranimalteleport.assets;
 
+import com.coollord22.otheranimalteleport.OtherAnimalTeleport;
 import com.griefdefender.api.GriefDefender;
 import com.griefdefender.api.claim.Claim;
 import com.sk89q.worldedit.math.BlockVector3;
@@ -8,13 +9,10 @@ import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
-
-import com.coollord22.otheranimalteleport.OtherAnimalTeleport;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
 import java.text.DecimalFormat;
 import java.util.HashSet;
-import java.util.Set;
 
 public class OATCommon {
 	private final OtherAnimalTeleport plugin;

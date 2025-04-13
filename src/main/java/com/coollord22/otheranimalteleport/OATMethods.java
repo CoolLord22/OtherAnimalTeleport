@@ -1,15 +1,12 @@
 package com.coollord22.otheranimalteleport;
 
+import com.coollord22.otheranimalteleport.assets.Verbosity;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
-
-import com.coollord22.otheranimalteleport.assets.Verbosity;
 
 public class OATMethods {
 	public static void teleportLeashedEnt(Entity ent, Location from, Location to, Player p, OtherAnimalTeleport plugin) {

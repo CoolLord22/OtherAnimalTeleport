@@ -6,13 +6,13 @@
 
 package com.coollord22.otheranimalteleport.assets;
 
-import java.util.List;
-import java.util.logging.Logger;
-
+import com.coollord22.otheranimalteleport.OtherAnimalTeleport;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.ConsoleCommandSender;
-import com.coollord22.otheranimalteleport.OtherAnimalTeleport;
+
+import java.util.List;
+import java.util.logging.Logger;
 
 public class Log {
     static ConsoleCommandSender console = null;

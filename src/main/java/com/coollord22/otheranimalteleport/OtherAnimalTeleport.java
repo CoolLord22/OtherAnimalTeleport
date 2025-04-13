@@ -1,11 +1,8 @@
 package com.coollord22.otheranimalteleport;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.*;
-
+import com.coollord22.otheranimalteleport.assets.*;
+import com.coollord22.otheranimalteleport.listeners.OATListeners;
+import net.md_5.bungee.api.ChatColor;
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.AdvancedPie;
 import org.bukkit.Bukkit;
@@ -13,14 +10,11 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.coollord22.otheranimalteleport.assets.Log;
-import com.coollord22.otheranimalteleport.assets.OATCommon;
-import com.coollord22.otheranimalteleport.assets.OATConfig;
-import com.coollord22.otheranimalteleport.assets.Updater;
-import com.coollord22.otheranimalteleport.assets.Verbosity;
-import com.coollord22.otheranimalteleport.listeners.OATListeners;
-
-import net.md_5.bungee.api.ChatColor;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.*;
 
 public class OtherAnimalTeleport extends JavaPlugin {
 	public static OtherAnimalTeleport plugin;

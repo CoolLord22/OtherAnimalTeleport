@@ -31,7 +31,7 @@ public class OATMethods {
 
 				undoInvulnerable(ent, invulnerable, plugin);
 			}
-		}.runTaskLater(plugin, 2);
+		}.runTaskLater(plugin, 2L);
 	}
 
 	public static void teleportEnt(Entity ent, Location from, Location to, Player p, OtherAnimalTeleport plugin) {
@@ -49,7 +49,7 @@ public class OATMethods {
 				ent.teleport(to);
 				undoInvulnerable(ent, invulnerable, plugin);
 			}
-		}.runTaskLater(plugin, 2);
+		}.runTaskLater(plugin, 2L);
 	}
 
 	private static void undoInvulnerable(Entity ent, boolean invulnerable, OtherAnimalTeleport plugin) {

@@ -11,12 +11,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class OATMethods {
 	public static void teleportLeashedEnt(Entity ent, Location from, Location to, Player p, OtherAnimalTeleport plugin) {
 		String entID = "[Ent-" + ent.getEntityId() + "] ";
-		Chunk fromChunk = from.getChunk();
-		Chunk toChunk = to.getChunk();
-		if(plugin.toUseTickets) {
-			fromChunk.addPluginChunkTicket(plugin);
-			toChunk.addPluginChunkTicket(plugin);
-		}
 
 		plugin.log.logInfo(entID + "Attempting to null the leash holder.", Verbosity.HIGHEST);
 		((LivingEntity) ent).setLeashHolder(null);
@@ -35,11 +29,6 @@ public class OATMethods {
 				plugin.log.logInfo(entID + "Re-attaching leash holder as " + p.getName() + ".", Verbosity.HIGHEST);
 				((LivingEntity) ent).setLeashHolder(p);
 
-				if(plugin.toUseTickets) {
-					fromChunk.removePluginChunkTicket(plugin);
-					toChunk.removePluginChunkTicket(plugin);
-				}
-
 				undoInvulnerable(ent, invulnerable, plugin);
 			}
 		}.runTaskLater(plugin, 2);
@@ -47,12 +36,6 @@ public class OATMethods {
 
 	public static void teleportEnt(Entity ent, Location from, Location to, Player p, OtherAnimalTeleport plugin) {
 		String entID = "[Ent-" + ent.getEntityId() + "] ";
-		Chunk fromChunk = from.getChunk();
-		Chunk toChunk = to.getChunk();
-		if(plugin.toUseTickets) {
-			fromChunk.addPluginChunkTicket(plugin);
-			toChunk.addPluginChunkTicket(plugin);
-		}
 
 		boolean invulnerable = ent.isInvulnerable();
 
@@ -64,12 +47,6 @@ public class OATMethods {
 
 				plugin.log.logInfo(entID + "Teleporting entity " + ent.getType(), Verbosity.HIGH);
 				ent.teleport(to);
-
-				if(plugin.toUseTickets) {
-					fromChunk.removePluginChunkTicket(plugin);
-					toChunk.removePluginChunkTicket(plugin);
-				}
-
 				undoInvulnerable(ent, invulnerable, plugin);
 			}
 		}.runTaskLater(plugin, 2);

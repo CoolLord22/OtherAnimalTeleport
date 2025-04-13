@@ -26,8 +26,14 @@ public class OATMethods {
 				plugin.log.logInfo(entID + "Teleporting entity " + ent.getType(), Verbosity.HIGH);
 				ent.teleport(to);
 
-				plugin.log.logInfo(entID + "Re-attaching leash holder as " + p.getName() + ".", Verbosity.HIGHEST);
-				((LivingEntity) ent).setLeashHolder(p);
+				// Delay re-attaching of leash by 10 ticks to ensure entity pathfinding cant freeze
+				new BukkitRunnable() {
+					@Override
+					public void run() {
+						plugin.log.logInfo(entID + "Re-attaching leash holder as " + p.getName() + ".", Verbosity.HIGHEST);
+						((LivingEntity)ent).setLeashHolder(p);
+					}
+				}.runTaskLater(plugin, 10L);
 
 				undoInvulnerable(ent, invulnerable, plugin);
 			}

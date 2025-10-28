@@ -1,7 +1,6 @@
 package com.coollord22.otheranimalteleport;
 
 import com.coollord22.otheranimalteleport.assets.Verbosity;
-import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -9,7 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class OATMethods {
-	public static void teleportLeashedEnt(Entity ent, Location from, Location to, Player p, OtherAnimalTeleport plugin) {
+	public static void teleportLeashedEnt(Entity ent, Location to, Player p, OtherAnimalTeleport plugin) {
 		String entID = "[Ent-" + ent.getEntityId() + "] ";
 
 		plugin.log.logInfo(entID + "Attempting to null the leash holder.", Verbosity.HIGHEST);
@@ -40,7 +39,7 @@ public class OATMethods {
 		}.runTaskLater(plugin, 2L);
 	}
 
-	public static void teleportEnt(Entity ent, Location from, Location to, Player p, OtherAnimalTeleport plugin) {
+	public static void teleportEnt(Entity ent, Location to, Player p, OtherAnimalTeleport plugin) {
 		String entID = "[Ent-" + ent.getEntityId() + "] ";
 
 		boolean invulnerable = ent.isInvulnerable();

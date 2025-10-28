@@ -66,7 +66,7 @@ public class OATListeners implements Listener {
 									if(((LivingEntity) ent).getLeashHolder().equals(event.getPlayer())) {
 										try {
 											plugin.log.logInfo(entID + "Leash holder passed. Attempting to teleport entity.", Verbosity.HIGH);
-											OATMethods.teleportLeashedEnt(ent, event.getFrom(), event.getTo(), event.getPlayer(), plugin);
+											OATMethods.teleportLeashedEnt(ent, event.getTo(), event.getPlayer(), plugin);
 											continue;
 										} catch(Exception e) {
 											plugin.log.logInfo(entID + "Teleport reached exception. Sending player error.", Verbosity.HIGHEST);
@@ -89,7 +89,7 @@ public class OATListeners implements Listener {
 										if(!(ent instanceof Sittable) || !((Sittable) ent).isSitting()) {
 											try {
 												plugin.log.logInfo(entID + "Pet checks passed. Attempting to teleport entity.", Verbosity.HIGH);
-												OATMethods.teleportEnt(ent, event.getFrom(), event.getTo(), event.getPlayer(), plugin);
+												OATMethods.teleportEnt(ent, event.getTo(), event.getPlayer(), plugin);
 												continue;
 											} catch(Exception e) {
 												plugin.log.logInfo(entID + "Teleport reached exception. Sending player error.", Verbosity.HIGHEST);

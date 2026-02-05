@@ -38,8 +38,6 @@ public class OATListeners implements Listener {
 		boolean toSendBlockedRegionLeft = false;
 		if(!plugin.enabled || event.isCancelled()) {
 			plugin.log.logInfo("Event was cancelled/plugin was disabled, ignoring teleport.", Verbosity.HIGH);
-		} else if(event.getTo() == null) {
-			plugin.log.logInfo("Teleport to-location was null, skipping this event.", Verbosity.HIGH);
 		} else if(plugin.config.ignoreCauses.contains(event.getCause())) {
 			plugin.log.logInfo("Teleport reason was set to be ignored, skipping this event.", Verbosity.HIGH);
 		} else if(!player.hasPermission("otheranimalteleport.player.use")) {
@@ -69,7 +67,7 @@ public class OATListeners implements Listener {
 				}
 				if(!livingEntity.isLeashed()) {
 					if(!(ent instanceof Tameable tameable)) {
-						plugin.log.logInfo(entID + "Entity was not leashed AND not a tameable type, Will send player entity_left notification.", Verbosity.HIGHEST);
+						plugin.log.logInfo(entID + "Entity was not leashed AND not a tameable type. Will send player entity_left notification.", Verbosity.HIGHEST);
 						toSendLeft = true;
 						continue;
 					}
@@ -127,10 +125,8 @@ public class OATListeners implements Listener {
 				// Remove chunk tickets 30 ticks after just to ensure entities have been fully processed
 				Bukkit.getScheduler().runTaskLater(plugin, () -> {
 					plugin.log.logInfo("Removing chunk tickets.", Verbosity.HIGHEST);
-					if (plugin.toUseTickets) {
-						from.removePluginChunkTicket(plugin);
-						to.removePluginChunkTicket(plugin);
-					}
+					from.removePluginChunkTicket(plugin);
+					to.removePluginChunkTicket(plugin);
 				}, 30L);
 			} else {
 				// Create chunk tickets one time before entities are gathered and teleported

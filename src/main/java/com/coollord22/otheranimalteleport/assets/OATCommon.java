@@ -52,8 +52,12 @@ public class OATCommon {
     }
 
     public boolean checkWorldGroup(PlayerTeleportEvent event) {
-        World fromWorld = event.getFrom().getWorld();
-        World toWorld = event.getTo().getWorld();
+        return checkWorldGroup(event.getFrom(), event.getTo());
+    }
+
+    public boolean checkWorldGroup(Location from, Location to) {
+        World fromWorld = from.getWorld();
+        World toWorld = to.getWorld();
 
         if(fromWorld.equals(toWorld)) {
             return true;

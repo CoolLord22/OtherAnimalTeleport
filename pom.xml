@@ -87,6 +87,12 @@
 			<version>1.21.11-R0.1-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
+		<dependency>
+			<groupId>net.kyori</groupId>
+			<artifactId>event-api</artifactId>
+			<version>3.0.0</version>
+			<scope>provided</scope>
+		</dependency>
 	</dependencies>
 
 	<scm>

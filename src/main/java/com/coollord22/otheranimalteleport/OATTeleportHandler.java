@@ -33,45 +33,41 @@ public class OATTeleportHandler {
 	 * @param to     the destination location (may be {@code null} – handled internally)
 	 */
 	public void checkAndHandle(Player player, Location from, Location to, TeleportCause teleportCause) {
-			if (!plugin.enabled) {
-					plugin.log.logInfo("Plugin was disabled, ignoring teleport.", Verbosity.HIGH);
-					return;
-			}
-			if (plugin.config.ignoreCauses.contains(teleportCause)) {
-				plugin.log.logInfo("Teleport reason was set to be ignored, skipping this event.", Verbosity.HIGH);
+		if (!plugin.enabled) {
+				plugin.log.logInfo("Plugin was disabled, ignoring teleport.", Verbosity.HIGH);
 				return;
-			}
-			if (to == null) {
-					plugin.log.logInfo("Teleport to-location was null, skipping this event.", Verbosity.HIGH);
-					return;
-			}
-			if (!player.hasPermission("otheranimalteleport.player.use")) {
-					plugin.log.logInfo("Player use permission check failed.", Verbosity.HIGH);
-					return;
-			}
-			if (!plugin.common.checkWorldGroup(from, to)) {
-					plugin.log.logInfo("World group check failed. Will send player not_in_world_group notification", Verbosity.HIGHEST);
-					if (plugin.config.notInWorldGroupMessage != null && !plugin.config.notInWorldGroupMessage.isEmpty())
-							plugin.common.sendMessage(plugin.config.usePrefix, player, plugin.config.notInWorldGroupMessage);
-					return;
-			}
-			if (!plugin.common.allowedRegion(from) || !plugin.common.allowedRegion(to)) {
-					plugin.log.logInfo("Blocked region check failed. Will send player blocked_region notification", Verbosity.HIGHEST);
-					if (plugin.config.blockedRegionLeftMessage != null && !plugin.config.blockedRegionLeftMessage.isEmpty())
-							plugin.common.sendMessage(plugin.config.usePrefix, player, plugin.config.blockedRegionLeftMessage);
-					return;
-			}
+		}
+		if (plugin.config.ignoreCauses.contains(teleportCause)) {
+			plugin.log.logInfo("Teleport reason was set to be ignored, skipping this event.", Verbosity.HIGH);
+			return;
+		}
+		if (!player.hasPermission("otheranimalteleport.player.use")) {
+			plugin.log.logInfo("Player use permission check failed.", Verbosity.HIGH);
+			return;
+		}
+		if (!plugin.common.checkWorldGroup(from, to)) {
+			plugin.log.logInfo("World group check failed. Will send player not_in_world_group notification", Verbosity.HIGHEST);
+			if (plugin.config.notInWorldGroupMessage != null && !plugin.config.notInWorldGroupMessage.isEmpty())
+					plugin.common.sendMessage(plugin.config.usePrefix, player, plugin.config.notInWorldGroupMessage);
+			return;
+		}
+		if (!plugin.common.allowedRegion(from) || !plugin.common.allowedRegion(to)) {
+			plugin.log.logInfo("Blocked region check failed. Will send player blocked_region notification", Verbosity.HIGHEST);
+			if (plugin.config.blockedRegionLeftMessage != null && !plugin.config.blockedRegionLeftMessage.isEmpty())
+					plugin.common.sendMessage(plugin.config.usePrefix, player, plugin.config.blockedRegionLeftMessage);
+			return;
+		}
 
-			TeleportResult result = handle(player, from, to);
+		TeleportResult result = handle(player, from, to);
 
-			if (plugin.config.failedTeleportMessage != null && !plugin.config.failedTeleportMessage.isEmpty() && result.toSendError)
-					plugin.common.sendMessage(plugin.config.usePrefix, player, plugin.config.failedTeleportMessage);
-			if (result.toSendTamedLeft || result.toSendLeft) {
-					if (result.toSendTamedLeft && plugin.config.leftTamedEntityMessage != null && !plugin.config.leftTamedEntityMessage.isEmpty())
-							plugin.common.sendMessage(plugin.config.usePrefix, player, plugin.config.leftTamedEntityMessage);
-					else if (result.toSendLeft && plugin.config.leftEntityMessage != null && !plugin.config.leftEntityMessage.isEmpty())
-							plugin.common.sendMessage(plugin.config.usePrefix, player, plugin.config.leftEntityMessage);
-			}
+		if (plugin.config.failedTeleportMessage != null && !plugin.config.failedTeleportMessage.isEmpty() && result.toSendError)
+				plugin.common.sendMessage(plugin.config.usePrefix, player, plugin.config.failedTeleportMessage);
+		if (result.toSendTamedLeft || result.toSendLeft) {
+				if (result.toSendTamedLeft && plugin.config.leftTamedEntityMessage != null && !plugin.config.leftTamedEntityMessage.isEmpty())
+						plugin.common.sendMessage(plugin.config.usePrefix, player, plugin.config.leftTamedEntityMessage);
+				else if (result.toSendLeft && plugin.config.leftEntityMessage != null && !plugin.config.leftEntityMessage.isEmpty())
+						plugin.common.sendMessage(plugin.config.usePrefix, player, plugin.config.leftEntityMessage);
+		}
 	}
 
 	/**
@@ -106,7 +102,7 @@ public class OATTeleportHandler {
 			}
 			if (!livingEntity.isLeashed()) {
 				if (!(ent instanceof Tameable tameable)) {
-					plugin.log.logInfo(entID + "Entity was not leashed AND not a tameable type, Will send player entity_left notification.", Verbosity.HIGHEST);
+					plugin.log.logInfo(entID + "Entity was not leashed AND not a tameable type. Will send player entity_left notification.", Verbosity.HIGHEST);
 					result.toSendLeft = true;
 					continue;
 				}

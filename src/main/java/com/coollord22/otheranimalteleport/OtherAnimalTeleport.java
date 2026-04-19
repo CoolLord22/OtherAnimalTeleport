@@ -1,7 +1,9 @@
 package com.coollord22.otheranimalteleport;
 
 import com.coollord22.otheranimalteleport.assets.*;
-import com.coollord22.otheranimalteleport.listeners.OATListeners;
+import com.coollord22.otheranimalteleport.listeners.OATCanvasListeners;
+import com.coollord22.otheranimalteleport.listeners.OATCommonListeners;
+import com.coollord22.otheranimalteleport.listeners.OATPaperListeners;
 import com.tcoded.folialib.FoliaLib;
 import net.md_5.bungee.api.ChatColor;
 import org.bstats.bukkit.Metrics;
@@ -75,7 +77,28 @@ public class OtherAnimalTeleport extends JavaPlugin {
 
 	private void registerListeners() {
 		PluginManager pm = Bukkit.getServer().getPluginManager();
-		pm.registerEvents(new OATListeners(this), this);
+		plugin.log.logInfo("Registering OATCommonListeners.", Verbosity.LOW);
+		pm.registerEvents(new OATCommonListeners(this), this);
+		if (isCanvas()) {
+			plugin.log.logInfo("Canvas server detected – registering OATCanvasListeners.", Verbosity.LOW);
+			pm.registerEvents(new OATCanvasListeners(this), this);
+		} else {
+			plugin.log.logInfo("Paper/Bukkit server detected – registering OATPaperListeners.", Verbosity.LOW);
+			if (foliaLib.isFolia()) {
+				plugin.log.logInfo("Folia is known to have unreliable fire teleport events. We recommend using Canvas if the plugin is not behaving as expected (https://github.com/PaperMC/Folia/issues/330)");
+			}
+			pm.registerEvents(new OATPaperListeners(this), this);
+		}
+	}
+
+	/** Returns true when the Canvas API is present on the classpath. */
+	private static boolean isCanvas() {
+		try {
+			Class.forName("io.canvasmc.canvas.event.EntityPostTeleportAsyncEvent");
+			return true;
+		} catch (ClassNotFoundException e) {
+			return false;
+		}
 	}
 
 	private void registerCommands() {

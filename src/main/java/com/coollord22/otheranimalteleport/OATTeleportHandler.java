@@ -3,6 +3,7 @@ package com.coollord22.otheranimalteleport;
 import com.coollord22.otheranimalteleport.assets.Verbosity;
 import org.bukkit.Location;
 import org.bukkit.entity.*;
+import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
 public class OATTeleportHandler {
 
@@ -20,6 +21,57 @@ public class OATTeleportHandler {
 		public boolean toSendError = false;
 		public boolean toSendLeft = false;
 		public boolean toSendTamedLeft = false;
+	}
+
+	/**
+	 * Runs the common pre-checks shared by all listener implementations and,
+	 * if they all pass, delegates to {@link #handle(Player, Location, Location)}
+	 * and sends the appropriate result messages to the player.
+	 *
+	 * @param player the teleporting player
+	 * @param from   the origin location
+	 * @param to     the destination location (may be {@code null} – handled internally)
+	 */
+	public void checkAndHandle(Player player, Location from, Location to, TeleportCause teleportCause) {
+			if (!plugin.enabled) {
+					plugin.log.logInfo("Plugin was disabled, ignoring teleport.", Verbosity.HIGH);
+					return;
+			}
+			if (plugin.config.ignoreCauses.contains(teleportCause)) {
+				plugin.log.logInfo("Teleport reason was set to be ignored, skipping this event.", Verbosity.HIGH);
+				return;
+			}
+			if (to == null) {
+					plugin.log.logInfo("Teleport to-location was null, skipping this event.", Verbosity.HIGH);
+					return;
+			}
+			if (!player.hasPermission("otheranimalteleport.player.use")) {
+					plugin.log.logInfo("Player use permission check failed.", Verbosity.HIGH);
+					return;
+			}
+			if (!plugin.common.checkWorldGroup(from, to)) {
+					plugin.log.logInfo("World group check failed. Will send player not_in_world_group notification", Verbosity.HIGHEST);
+					if (plugin.config.notInWorldGroupMessage != null && !plugin.config.notInWorldGroupMessage.isEmpty())
+							plugin.common.sendMessage(plugin.config.usePrefix, player, plugin.config.notInWorldGroupMessage);
+					return;
+			}
+			if (!plugin.common.allowedRegion(from) || !plugin.common.allowedRegion(to)) {
+					plugin.log.logInfo("Blocked region check failed. Will send player blocked_region notification", Verbosity.HIGHEST);
+					if (plugin.config.blockedRegionLeftMessage != null && !plugin.config.blockedRegionLeftMessage.isEmpty())
+							plugin.common.sendMessage(plugin.config.usePrefix, player, plugin.config.blockedRegionLeftMessage);
+					return;
+			}
+
+			TeleportResult result = handle(player, from, to);
+
+			if (plugin.config.failedTeleportMessage != null && !plugin.config.failedTeleportMessage.isEmpty() && result.toSendError)
+					plugin.common.sendMessage(plugin.config.usePrefix, player, plugin.config.failedTeleportMessage);
+			if (result.toSendTamedLeft || result.toSendLeft) {
+					if (result.toSendTamedLeft && plugin.config.leftTamedEntityMessage != null && !plugin.config.leftTamedEntityMessage.isEmpty())
+							plugin.common.sendMessage(plugin.config.usePrefix, player, plugin.config.leftTamedEntityMessage);
+					else if (result.toSendLeft && plugin.config.leftEntityMessage != null && !plugin.config.leftEntityMessage.isEmpty())
+							plugin.common.sendMessage(plugin.config.usePrefix, player, plugin.config.leftEntityMessage);
+			}
 	}
 
 	/**
@@ -93,6 +145,15 @@ public class OATTeleportHandler {
 		return result;
 	}
 
+	/**
+	 * Adds or removes plugin chunk tickets for the origin and destination chunks
+	 * to ensure they remain loaded during the teleport operation.
+	 *
+	 * @param from   the origin location whose chunk ticket will be managed
+	 * @param to     the destination location whose chunk ticket will be managed
+	 * @param remove if {@code true}, schedules the removal of chunk tickets after a
+	 *               short delay; if {@code false}, adds chunk tickets immediately
+	 */
 	private void handleChunkTickets(Location from, Location to, boolean remove) {
 		if (plugin.toUseTickets) {
 			if (remove) {

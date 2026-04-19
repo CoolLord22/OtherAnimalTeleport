@@ -13,6 +13,12 @@
 	</properties>
 
 	<repositories>
+		<!-- CanvasMC repo -->
+		<repository>
+			<id>canvasmc-repo</id>
+			<url>https://maven.canvasmc.io/snapshots</url>
+		</repository>
+
 		<!-- PaperMC repo -->
 		<repository>
 			<id>papermc</id>
@@ -73,6 +79,12 @@
 			<groupId>com.griefdefender</groupId>
 			<artifactId>api</artifactId>
 			<version>2.1.0-SNAPSHOT</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.canvasmc.canvas</groupId>
+			<artifactId>canvas-api</artifactId>
+			<version>1.21.11-R0.1-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>

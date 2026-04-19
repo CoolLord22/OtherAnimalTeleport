@@ -5,6 +5,7 @@ author: CoolLord22
 load: POSTWORLD
 api-version: 1.13
 folia-supported: true
+canvas-supported: true
 softdepend: [WorldGuard]
 commands:
     oat:
